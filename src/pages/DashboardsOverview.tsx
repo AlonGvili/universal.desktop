@@ -1,50 +1,36 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
-  Space,
-  Card,
-  Alert,
-  Skeleton,
-  Row,
-  Col,
-  Badge,
-  Divider,
-  Layout,
-  Menu,
-  Button,
-  Typography,
-} from "antd";
+import React from "react";
 import Axios, { AxiosResponse, AxiosError } from "axios";
 import { queryCache, useQuery } from "react-query";
 import { Dashboard } from "../types";
-import { Link } from "react-router-dom";
-import { setStatusColor } from "utilities/utils";
-import { Dropdown, PageHeader, Tag } from "antd/es";
-import { Progress } from "antd";
-import { useSize } from "ahooks";
-import { presetPrimaryColors, blue } from "@ant-design/colors";
 import {
+  Form,
+  Input,
+  Button,
+  Typography,
+  Row,
+  Col,
+  Space,
+  Card,
+  Select,
+  Grid,
+} from "antd/es";
+import {
+  AppstoreAddOutlined,
+  CodeOutlined,
+  DeleteFilled,
+  EditFilled,
   EditOutlined,
-  GlobalOutlined,
-  PlaySquareOutlined,
-  DeleteOutlined,
-  MoreOutlined,
-  MenuOutlined,
+  PlusOutlined,
+  PoweroffOutlined,
 } from "@ant-design/icons";
-import { Bullet } from "@ant-design/charts";
-import { BulletConfig } from "@ant-design/charts/es/bullet";
 
-const DemoBullet = (props: {
-  data: { title: string; measures: number[]; targets: number[] }[]
-}) => {
-  const config: BulletConfig = {
-    data: props.data,
-    forceFit: true,
-    height: 80,
-    rangeMax: 100,
-  };
-  return <Bullet {...config} />;
-};
+import CardHeader from "components/card/TitleAndDescription";
+import BodyLink from "components/card/BodyLink";
+import InfoSection from "components/card/InfoSection";
+import { Divider } from "antd";
+import { presetDarkPalettes, presetPrimaryColors } from "@ant-design/colors";
 
+const byteSize = require("byte-size");
 const url = `http://localhost:5000/api/v1`;
 
 export async function fetchDashboards(): Promise<Dashboard[]> {
@@ -69,278 +55,116 @@ export function useDashboards() {
   });
 }
 
+const { useBreakpoint } = Grid;
+
 export default function DashboardsOverview() {
+  const breakpoint = useBreakpoint();
   const { data } = useDashboards();
   return (
-    <Row
-      gutter={[
-        { lg: 24, md: 16, xs: 0 },
-        { lg: 24, md: 16, xs: 8 },
-      ]}
-    >
-      <Col lg={{ span: 12 }} md={{ span: 12 }} xs={{ span: 24 }}>
-        <Card
-          bodyStyle={{ padding: 0 }}
-          bordered={false}
-          style={{ width: "100%" }}
-        >
-          <Layout>
-            <Layout.Content
-              style={{
-                backgroundColor: "#fff",
-                padding: 24,
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <Card.Meta
-                style={{ flex: "0 1 35%", marginBottom: 24 }}
-                title="Help Desk Portal"
-                description="Portal dashboard to the helpdesk ppl, so the can manage users password"
-              />
-              <Space
-                align="baseline"
-                style={{ flex: 1, justifyContent: "space-evenly" }}
+    <>
+      <Row gutter={[16,16]}>
+        <Col span={24}>
+          <Card bordered={false}>
+            <Form colon={false} name="search_dashboard" layout="inline">
+              <Form.Item>
+                <Typography style={{ marginBottom: 0 }}>
+                  <Typography.Title level={5}>
+                    Search and Filter
+                  </Typography.Title>
+                </Typography>
+              </Form.Item>
+              <Form.Item>
+                <Form.Item name="search" noStyle>
+                  <Input.Search
+                    placeholder="Search for a dashboards"
+                    bordered={true}
+                    allowClear
+                  />
+                </Form.Item>
+              </Form.Item>
+
+              <Form.Item name="filter_by_status">
+                <Select placeholder="Filter By Status" bordered={true}>
+                  <Select.Option value={0}>Stopped</Select.Option>
+                  <Select.Option value={1}>Running</Select.Option>
+                  <Select.Option value={3}>NA</Select.Option>
+                  <Select.Option value={4}>Waiting for feedback</Select.Option>
+                </Select>
+              </Form.Item>
+            </Form>
+          </Card>
+        </Col>
+      </Row>
+      <Row gutter={[16, 16]}>
+        {data?.map((dashboard, index) => {
+          return (
+            <Col key={index} lg={{ span: 6 }} md={{ span: 12 }} xs={{ span: 24 }}>
+              <Card
+                bodyStyle={{ padding: 24 }}
+                bordered={false}
+                style={{ minWidth: 280, height: "100%" }}
+                headStyle={{ borderBottom: "unset" }}
+                hoverable
               >
-                <Progress
-                  type="dashboard"
-                  percent={32}
-                  width={100}
-                  format={(percent) => (
-                    <Typography>
-                      <Typography.Paragraph style={{ fontSize: 12 }}>
-                        {`Memory`}
-                      </Typography.Paragraph>
-                      <Typography.Text
-                        style={{ fontSize: 18, fontWeight: 600 }}
-                      >
-                        {`${580}mb`}
-                      </Typography.Text>
-                    </Typography>
-                  )}
+                <BodyLink id={dashboard.id}>
+                  {/* dashboard name and description */}
+
+                  <CardHeader
+                    name={dashboard.name}
+                    description={dashboard.description}
+                  />
+
+                  <Space direction="vertical" size="large">
+                    {/* dashboard information */}
+
+                    <InfoSection>
+                      <Space direction="vertical">
+                        <Space>
+                          <CodeOutlined />
+                          {dashboard.powerShellVersion?.version || "7.0.3"}
+                        </Space>
+                        <Space>
+                          <AppstoreAddOutlined />
+                          {dashboard.dashboardFramework?.name}
+                        </Space>
+                      </Space>
+                    </InfoSection>
+                  </Space>
+                </BodyLink>
+                <Divider
+                  style={{ width: "100%" }}
+                  type="horizontal"
+                  dashed
+                  plain
                 />
-                <Progress
-                  type="dashboard"
-                  percent={36}
-                  width={100}
-                  format={(percent) => (
-                    <Typography>
-                      <Typography.Paragraph style={{ fontSize: 12 }}>
-                        {`Endpoints`}
-                      </Typography.Paragraph>
-                      <Typography.Text
-                        style={{ fontSize: 18, fontWeight: 600 }}
-                      >
-                        {`${36}`}
-                      </Typography.Text>
-                    </Typography>
-                  )}
-                />
-                <Progress
-                  type="dashboard"
-                  percent={0.1264 * 100}
-                  width={100}
-                  format={(percent) => (
-                    <Typography>
-                      <Typography.Paragraph style={{ fontSize: 12 }}>
-                        {`Sessions`}
-                      </Typography.Paragraph>
-                      <Typography.Text
-                        style={{ fontSize: 18, fontWeight: 600 }}
-                      >
-                        {`${1264}`}
-                      </Typography.Text>
-                    </Typography>
-                  )}
-                />
-              </Space>
-            </Layout.Content>
-            <Layout.Sider
-              collapsed={true}
-              collapsible={false}
-              collapsedWidth={48}
-              style={{ width: 48 }}
-            >
-              <Menu mode="inline" style={{ width: 48 }} theme="light">
-                <Menu.Item
-                  key="edit"
-                  icon={<EditOutlined />}
-                  style={{ padding: "0px 16px" }}
-                />
-                <Menu.Item
-                  key="view"
-                  icon={<GlobalOutlined />}
-                  style={{ padding: "0px 16px" }}
-                />
-                <Menu.Item
-                  key="start"
-                  icon={<PlaySquareOutlined />}
-                  style={{ padding: "0px 16px" }}
-                />
-                <Menu.Item
-                  key="delete"
-                  danger={true}
-                  icon={<DeleteOutlined />}
-                  style={{ padding: "0px 16px" }}
-                />
-              </Menu>
-            </Layout.Sider>
-          </Layout>
-        </Card>
-      </Col>
-      <Col lg={{ span: 12 }} md={{ span: 12 }} xs={{ span: 24 }}>
-        <Card
-          bodyStyle={{ padding: 0 }}
-          bordered={false}
-          style={{ width: "100%" }}
-        >
-          <Layout>
-            <Layout.Content
-              style={{
-                backgroundColor: "#fff",
-                // padding: 24,
-              }}
-            >
-              <PageHeader
-                title="Help Desk Portal"
-                // subTitle="Portal dashboard to the helpdesk ppl, so the can manage users password"
-                ghost={true}
-                tags={[
-                  <Tag color="blue" title="production">
-                    production
-                  </Tag>,
-                  <Tag color="pink" title="helpdesk">
-                    helpdesk
-                  </Tag>,
-                ]}
-              >
                 <Space
-                  align="baseline"
-                  style={{ flex: 1, justifyContent: "space-evenly" }}
+                  style={{ justifyContent: "space-between", width: "100%" }}
                 >
-                  <Progress
-                    type="dashboard"
-                    percent={32}
-                    width={120}
-                    format={(percent) => (
-                      <Typography>
-                        <Typography.Paragraph style={{ fontSize: 12 }}>
-                          {`Memory`}
-                        </Typography.Paragraph>
-                        <Typography.Text
-                          style={{ fontSize: 18, fontWeight: 600 }}
-                        >
-                          {`${580}mb`}
-                        </Typography.Text>
-                      </Typography>
-                    )}
-                  />
-                  <Progress
-                    type="dashboard"
-                    percent={36}
-                    width={120}
-                    format={(percent) => (
-                      <Typography>
-                        <Typography.Paragraph style={{ fontSize: 12 }}>
-                          {`Endpoints`}
-                        </Typography.Paragraph>
-                        <Typography.Text
-                          style={{ fontSize: 18, fontWeight: 600 }}
-                        >
-                          {`${36}`}
-                        </Typography.Text>
-                      </Typography>
-                    )}
-                  />
-                  <Progress
-                    type="dashboard"
-                    percent={0.1264 * 100}
-                    width={120}
-                    format={(percent) => (
-                      <Typography>
-                        <Typography.Paragraph style={{ fontSize: 12 }}>
-                          {`Sessions`}
-                        </Typography.Paragraph>
-                        <Typography.Text
-                          style={{ fontSize: 18, fontWeight: 600 }}
-                        >
-                          {`${1264}`}
-                        </Typography.Text>
-                      </Typography>
-                    )}
-                  />
+                  <Button.Group>
+                    <Button icon={<DeleteFilled />} type="text" />
+                    <Button icon={<EditFilled />} type="text" />
+                  </Button.Group>
+                  <Button.Group>
+                    <Button
+                      icon={
+                        <PoweroffOutlined
+                          style={{
+                            color:
+                              dashboard.status === 1
+                                ? `${presetDarkPalettes["blue"][6]}`
+                                : presetDarkPalettes["red"][6],
+                          }}
+                        />
+                      }
+                      type="text"
+                    />
+                  </Button.Group>
                 </Space>
-              </PageHeader>
-            </Layout.Content>
-            <Layout.Sider
-              collapsed={true}
-              collapsible={false}
-              collapsedWidth={48}
-              style={{ width: 48 }}
-            >
-              <Menu mode="inline" style={{ width: 48 }} theme="dark">
-                <Menu.Item
-                  key="edit"
-                  icon={<EditOutlined />}
-                  style={{ padding: "0px 16px" }}
-                />
-                <Menu.Item
-                  key="view"
-                  icon={<GlobalOutlined />}
-                  style={{ padding: "0px 16px" }}
-                />
-                <Menu.Item
-                  key="start"
-                  icon={<PlaySquareOutlined />}
-                  style={{ padding: "0px 16px" }}
-                />
-                <Menu.Item
-                  key="delete"
-                  danger={true}
-                  icon={<DeleteOutlined />}
-                  style={{ padding: "0px 16px" }}
-                />
-              </Menu>
-            </Layout.Sider>
-          </Layout>
-        </Card>
-      </Col>
-      <Col lg={{ span: 12 }} md={{ span: 12 }} xs={{ span: 24 }}>
-        <Card
-          bodyStyle={{ padding: 0 }}
-          bordered={false}
-          style={{ width: "100%" }}
-          extra={
-            <Dropdown
-              placement="bottomRight"
-              overlay={
-                <Menu theme="dark">
-                  <Menu.Item key="edit" icon={<EditOutlined />}>
-                    Edit
-                  </Menu.Item>
-                  <Menu.Item key="view" icon={<GlobalOutlined />}>
-                    View
-                  </Menu.Item>
-                  <Menu.Item key="start" icon={<PlaySquareOutlined />}>
-                    Start
-                  </Menu.Item>
-                  <Menu.Item key="delete" icon={<DeleteOutlined />}>
-                    Delete
-                  </Menu.Item>
-                </Menu>
-              }
-            >
-              <Button icon={<MenuOutlined />} type="text" />
-            </Dropdown>
-          }
-        >
-          <Layout style={{ height: 128 }}>
-            <Layout.Content
-              style={{ backgroundColor: "#1f1f1f" }}
-            ></Layout.Content>
-          </Layout>
-        </Card>
-      </Col>
-    </Row>
+              </Card>
+            </Col>
+          );
+        })}
+      </Row>
+    </>
   );
 }

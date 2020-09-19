@@ -21,6 +21,7 @@
     "ahooks": "^2.6.0",
     "antd": "^4.6.3",
     "axios": "^0.20.0",
+    "byte-size": "^7.0.0",
     "craco-less": "^1.17.0",
     "date-fns": "^2.16.1",
     "monaco-editor": "^0.20.0",

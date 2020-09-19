@@ -11,7 +11,7 @@ import {
 
 export default function AppBar() {
   return (
-    <Layout.Header style={{ backgroundColor: "#fff", padding: 0 }}>
+    <Layout.Header style={{ padding: 0 }}>
       <Menu mode="horizontal" theme="dark" style={{ width: "100%" }}>
         <Menu.Item key="apis" icon={<ApiOutlined />}>
           <Link to="/apis">Apis</Link>

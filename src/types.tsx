@@ -16,20 +16,21 @@ export type AuthenticationMethod = {
 
 export type Dashboard = {
   id: number;
-  baseUrl?: string;
-  dashboardFramework?: DashboardFramework;
-  powerShellVersion?: PowerShellVersion;
-  name?: string;
-  content?: string;
-  status?: number;
-  filePath?: string;
-  authenticated?: boolean;
-  disableAutoStart?: boolean;
-  autoReload?: boolean;
-  notes?: string;
-  processId?: number;
-  processName?: string;
-  dashboardComponents?: DashboardComponent[];
+  baseUrl: string;
+  dashboardFramework: DashboardFramework;
+  powerShellVersion: PowerShellVersion;
+  name: string;
+  content: string;
+  description: string;
+  status: number;
+  filePath: string;
+  authenticated: boolean;
+  disableAutoStart: boolean;
+  autoReload: boolean;
+  notes: string;
+  processId: number;
+  processName: string;
+  dashboardComponents: DashboardComponent[];
 };
 
 export type DashboardLog = {

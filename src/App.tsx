@@ -4,15 +4,18 @@ import { BrowserRouter } from "react-router-dom";
 // import AuthProvider from "context/auth/AuthProvider";
 // import AppProvider from "context/app/AppProvider";
 import PrimaryLayout from "layouts/PrimaryLayout";
+import { Layout } from "antd/es";
 
 function App() {
   return (
     <BrowserRouter>
-      {/* <AuthProvider> */}
+      <Layout >
+        {/* <AuthProvider> */}
         {/* <AppProvider> */}
-          <PrimaryLayout />
+        <PrimaryLayout />
         {/* </AppProvider> */}
-      {/* </AuthProvider> */}
+        {/* </AuthProvider> */}
+      </Layout>
     </BrowserRouter>
   );
 }

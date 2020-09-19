@@ -1,5 +1,3 @@
-/// This is where we should start putting things that require a switch between the desktop\web version so it's all in one place
-
 import { presetPrimaryColors } from "@ant-design/colors";
 import { Badge, Tag } from "antd";
 import React from "react";
@@ -13,8 +11,16 @@ import {
   FieldTimeOutlined,
 } from "@ant-design/icons";
 
+declare const MethodName: ["GET", "POST", "DELETE", "PUT"];
+export declare type MethodType = typeof MethodName[number];
 
-export function setMethodColor(method: string | undefined) {
+/**
+ * Set the color for the current method. 
+ * @param method
+ * @example setMethodColor("GET")
+ * @description Will return the method text with the correct color.
+ */
+export function setMethodColor(method: MethodType | undefined) {
   switch (method) {
     case "GET":
       return presetPrimaryColors["blue"];
@@ -27,19 +33,37 @@ export function setMethodColor(method: string | undefined) {
   }
 }
 
-export function setStatusColor(status: number | undefined) {
+
+export declare const StatusNumber: [0, 1, 3, 4];
+export declare type StatusType = typeof StatusNumber[number];
+
+/**
+ * Return a Badge with text and color 
+ * @param {StatusType[]} status
+ * @example setStatusColor(1)
+ * @description Will return ant-design Badge component base on status number.
+ * @author Alon Gvili
+ */
+export function setStatusColor(status: StatusType) {
   switch (status) {
     case 0:
       return <Badge status="error" text="Stopped" />;
     case 1:
       return <Badge status="processing" text="Running" />;
     case 3:
-      return <Badge status="default" text="N/A" />;
+      return <Badge status="default" text="NA" />;
     case 4:
       return <Badge status="warning" text="Waiting for feedback" />;
   }
 }
 
+/**
+ *
+ * @description Will return ant-design tag component base on status number.
+ * @param status
+ * @example setStatusTag(1)
+ * @author Alon Gvili
+ */
 export function setStatusTag(status: number) {
   switch (status) {
     case 0:

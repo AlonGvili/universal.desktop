@@ -12,7 +12,7 @@ import Security from "routes/Security"
 
 const PrimaryLayout = () => {
   return (
-    <Layout style={{ height: "100vh" }}>
+    <Layout style={{ minHeight: "100vh" }}>
       <AppBar />
       <Layout.Content style={{ padding: 24 }}>
         <Switch>
