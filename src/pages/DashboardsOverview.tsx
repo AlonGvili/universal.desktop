@@ -63,11 +63,10 @@ export default function DashboardsOverview() {
   const [filterForm] = Form.useForm();
 
   function onFilterChnage(value: SelectValue) {
-    if(value === undefined) {
-      setFilterValue(data)
-    }
-      else {
-      setFilterValue(data?.filter(dashboard => dashboard.status === value))
+    if (value === undefined) {
+      setFilterValue(data);
+    } else {
+      setFilterValue(data?.filter((dashboard) => dashboard.status === value));
     }
   }
 
@@ -76,23 +75,24 @@ export default function DashboardsOverview() {
     1: "Running",
     3: "Debug",
     4: "Feedback",
-  }
+  };
 
   function onSearch(value) {
-    if(value === undefined) {
-      setFilterValue(data)
-    }
-    else {
-      setFilterValue(() => data?.filter(dashboard => { 
-        return (
-          dashboard.name?.includes(value) ||
-          dashboard.baseUrl?.includes(value) ||
-          dashboard.dashboardFramework?.name?.includes(value) ||
-          dashboard.dashboardFramework?.version?.includes(value) ||
-          dashboard.powerShellVersion?.version?.includes(value) ||
-          statusToName[dashboard.status] === value
-        );
-      }))
+    if (value === undefined) {
+      setFilterValue(data);
+    } else {
+      setFilterValue(() =>
+        data?.filter((dashboard) => {
+          return (
+            dashboard.name?.includes(value) ||
+            dashboard.baseUrl?.includes(value) ||
+            dashboard.dashboardFramework?.name?.includes(value) ||
+            dashboard.dashboardFramework?.version?.includes(value) ||
+            dashboard.powerShellVersion?.version?.includes(value) ||
+            statusToName[dashboard.status] === value
+          );
+        })
+      );
     }
   }
 
@@ -169,6 +169,7 @@ export default function DashboardsOverview() {
               md={{ span: 12 }}
               sm={{ span: 12 }}
               xs={{ span: 24 }}
+
             >
               <Card
                 bodyStyle={{ padding: 24 }}
@@ -192,11 +193,11 @@ export default function DashboardsOverview() {
                       <Space direction="vertical">
                         <Space>
                           <CodeOutlined />
-                          {dashboard.powerShellVersion?.version || "7.0.3"}
+                          {`PowerShell ${dashboard.powerShellVersion}`}
                         </Space>
                         <Space>
                           <AppstoreAddOutlined />
-                          {dashboard.dashboardFramework?.name}
+                          {`${dashboard.dashboardFramework?.name} ${dashboard.dashboardFramework.version}`}
                         </Space>
                       </Space>
                     </InfoSection>
