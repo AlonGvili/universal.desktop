@@ -1,6 +1,9 @@
-import { presetPrimaryColors } from "@ant-design/colors";
-import { Badge, Tag } from "antd";
 import React from "react";
+
+import { presetPrimaryColors } from "@ant-design/colors";
+
+import { Badge, Tag, Tooltip } from "antd";
+
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
@@ -9,13 +12,14 @@ import {
   SyncOutlined,
   MinusCircleOutlined,
   FieldTimeOutlined,
+  PoweroffOutlined,
 } from "@ant-design/icons";
 
-declare const MethodName: ["GET", "POST", "DELETE", "PUT"];
+export declare const MethodName: ["GET", "POST", "DELETE", "PUT"];
 export declare type MethodType = typeof MethodName[number];
 
 /**
- * Set the color for the current method. 
+ * Set the color for the current method.
  * @param method
  * @example setMethodColor("GET")
  * @description Will return the method text with the correct color.
@@ -34,11 +38,62 @@ export function setMethodColor(method: MethodType | undefined) {
 }
 
 
+/**
+ * Set the power button icon color base on the dashboard current status.
+ * @param status
+ * @description Will return the currect icon color base on the current dashboard status.
+ * @example setPowerIconColor(0)
+ */
+export function setPowerIconColor(status: number) {
+  switch (status) {
+    case 0:
+      return (
+        <Tooltip title="Dashboard Is Stopped" color="red">
+          <PoweroffOutlined
+            style={{
+              color: presetPrimaryColors["red"],
+            }}
+          />
+        </Tooltip>
+      );
+    case 1:
+      return (
+        <Tooltip title="Dashboard Is Running" color="blue">
+        <PoweroffOutlined
+          style={{
+            color: presetPrimaryColors["blue"],
+          }}
+        />
+        </Tooltip>
+      );
+    case 3:
+      return (
+        <Tooltip title="Dashboard In Debug Mode" color="cyan">
+          <PoweroffOutlined
+            style={{
+              color: presetPrimaryColors["cyan"],
+            }}
+          />
+        </Tooltip>
+      );
+    case 4:
+      return (
+        <Tooltip title="Dashboard Is Waiting For Feedback" color="gold">
+        <PoweroffOutlined
+          style={{
+            color: presetPrimaryColors["gold"],
+          }}
+        />
+        </Tooltip>
+      );
+  }
+}
+
 export declare const StatusNumber: [0, 1, 3, 4];
 export declare type StatusType = typeof StatusNumber[number];
 
 /**
- * Return a Badge with text and color 
+ * Return a Badge with text and color
  * @param {StatusType[]} status
  * @example setStatusColor(1)
  * @description Will return ant-design Badge component base on status number.
