@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Axios, { AxiosResponse, AxiosError } from "axios";
-import { queryCache, QueryStatus, useQuery } from "react-query";
+import { queryCache, useQuery } from "react-query";
 import { Dashboard } from "../types";
 import {
   Form,
@@ -27,12 +27,12 @@ import BodyLink from "components/card/BodyLink";
 import InfoSection from "components/card/InfoSection";
 import { Divider, Radio, Select, Tooltip } from "antd";
 import { setPowerIconColor } from "utilities/utils";
-import { useDebounce } from "ahooks";
+// import { useDebounce } from "ahooks";
 import { SelectValue } from "antd/lib/select";
 import PSUTable from "components/Table";
 
-const byteSize = require("byte-size");
-const url = `http://localhost:5000/api/v1`;
+// const byteSize = require("byte-size");
+// const url = `http://localhost:5000/api/v1`;
 
 export async function fetchDashboards(): Promise<Dashboard[]> {
   const dashboards: Dashboard[] = await Axios.get(
@@ -56,7 +56,7 @@ export function useDashboards() {
   });
 }
 
-const { useBreakpoint } = Grid;
+// const { useBreakpoint } = Grid;
 
 export default function DashboardsOverview() {
   // const breakpoint = useBreakpoint();
