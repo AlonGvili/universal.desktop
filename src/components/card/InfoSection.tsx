@@ -1,5 +1,5 @@
 import { Space, Typography } from "antd/es";
-import React, { Children } from "react";
+import React from "react";
 
 export default function InfoSection(
   props: React.PropsWithChildren<any>
