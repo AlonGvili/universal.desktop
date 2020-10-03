@@ -28,48 +28,48 @@ import { Divider, Radio, Select, Tooltip } from "antd";
 import { setPowerIconColor, appSearch } from "utilities/utils";
 import { SelectValue } from "antd/lib/select";
 import PSUTable from "components/Table";
-const db = require("db.json")
+
 // const byteSize = require("byte-size");
 // const url = `http://localhost:5000/api/v1`;
 
-// export async function fetchDashboards(): Promise<Dashboard[]> {
-//   const dashboards: Dashboard[] = await Axios.get(
-//     // `https://my-json-server.typicode.com/alongvili/psu/Dashboards`
-//     `../db.json`
-//   ).then((res: AxiosResponse<Dashboard[]>) => res.data);
+export async function fetchDashboards(): Promise<Dashboard[]> {
+  const dashboards: Dashboard[] = await Axios.get(
+    // `https://my-json-server.typicode.com/alongvili/psu/Dashboards`
+    `https://raw.githubusercontent.com/AlonGvili/psu/master/db.json`
+  ).then((res: AxiosResponse<Dashboard[]>) => res.data);
 
-//   dashboards.forEach((dashboard: Dashboard) => {
-//     queryCache.setQueryData(
-//       ["dashboard", { dashboardId: dashboard.id }],
-//       dashboard
-//     );
-//   });
+  dashboards.forEach((dashboard: Dashboard) => {
+    queryCache.setQueryData(
+      ["dashboard", { dashboardId: dashboard.id }],
+      dashboard
+    );
+  });
 
-//   return dashboards;
-// }
+  return dashboards;
+}
 
-// export function useDashboards() {
-//   return useQuery("dashboards", fetchDashboards, {
-//     onError: (error: AxiosError) => error,
-//     suspense: true,
-//   });
-// }
+export function useDashboards() {
+  return useQuery("dashboards", fetchDashboards, {
+    onError: (error: AxiosError) => error,
+    suspense: true,
+  });
+}
 
-// export async function fetchRoles(): Promise<Role[]> {
-//   const roles: Role[] = await Axios.get(`http://localhost:3004/Roles`).then(
-//     (res: AxiosResponse<Role[]>) => res.data
-//   );
+export async function fetchRoles(): Promise<Role[]> {
+  const roles: Role[] = await Axios.get(
+    `https://raw.githubusercontent.com/AlonGvili/psu/master/db.json`
+  ).then((res: AxiosResponse<Role[]>) => res.data);
 
-//   roles.forEach((role: Role) => {
-//     queryCache.setQueryData(["role", { roleId: role.id }], role);
-//   });
+  roles.forEach((role: Role) => {
+    queryCache.setQueryData(["role", { roleId: role.id }], role);
+  });
 
-//   return roles;
-// }
+  return roles;
+}
 
-// export function useRoles() {
-//   return useQuery("roles", fetchRoles);
-// }
+export function useRoles() {
+  return useQuery("roles", fetchRoles);
+}
 
 const statusToName = {
   0: "Stopped",
@@ -78,10 +78,8 @@ const statusToName = {
   4: "Feedback",
 };
 export default function DashboardsOverview() {
-  // const { data } = useDashboards();
-  // const { data: roles, isLoading } = useRoles();
-  const data = db.Dashboards
-  const roles = db.Roles
+  const { data } = useDashboards();
+  const { data: roles, isLoading } = useRoles();
   const [filterValue, setFilterValue] = useState<Dashboard[] | undefined>(
     () => {
       return data?.map((dashboard) => {
@@ -238,7 +236,7 @@ export default function DashboardsOverview() {
                   <Form.Item name="filter_by_role">
                     <Select
                       placeholder="Filter By Role"
-                      // loading={isLoading}
+                      loading={isLoading}
                       bordered={false}
                       allowClear={true}
                       dropdownMatchSelectWidth={true}
