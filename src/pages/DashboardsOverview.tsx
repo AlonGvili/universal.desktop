@@ -36,17 +36,17 @@ export async function fetchDashboards(): Promise<Dashboard[]> {
   const dashboards = await Axios.get(
     // `https://my-json-server.typicode.com/alongvili/psu/Dashboards`
     `https://raw.githubusercontent.com/AlonGvili/psu/master/db.json`
-  ).then((res: AxiosResponse<string>) => res.data);
+  ).then((res) => res.data);
 
-  let results = JSON.parse(dashboards)
-  results.Dashboards.forEach((dashboard: Dashboard) => {
+  // let results = JSON.parse(dashboards)
+  dashboards.Dashboards.forEach((dashboard: Dashboard) => {
     queryCache.setQueryData(
       ["dashboard", { dashboardId: dashboard.id }],
       dashboard
     );
   });
 
-  return results.Dashboards;
+  return dashboards.Dashboards;
 }
 
 export function useDashboards() {
@@ -59,14 +59,14 @@ export function useDashboards() {
 export async function fetchRoles(): Promise<Role[]> {
   const roles = await Axios.get(
     `https://raw.githubusercontent.com/AlonGvili/psu/master/db.json`
-  ).then((res: AxiosResponse<string>) => res.data);
+  ).then((res) => res.data);
 
-  let results = JSON.parse(roles);
-  results.Roles.forEach((role: Role) => {
+  // let results = JSON.parse(roles);
+  roles.Roles.forEach((role: Role) => {
     queryCache.setQueryData(["role", { roleId: role.id }], role);
   });
 
-  return results.Roles;
+  return roles.Roles;
 }
 
 export function useRoles() {
