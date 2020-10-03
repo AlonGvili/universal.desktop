@@ -27,7 +27,7 @@ import BodyLink from "components/card/BodyLink";
 import InfoSection from "components/card/InfoSection";
 import UpdateModal from "components/UpdateModal";
 // import TagsSection from "components/card/Tags";
-import { Divider, Popconfirm, Radio, Tag, Tooltip } from "antd";
+import { Divider, Popconfirm, Radio, Tooltip } from "antd";
 import { setPowerIconColor, appSearch } from "utilities/utils";
 import PSUTable from "components/Table";
 import { presetPrimaryColors } from "@ant-design/colors";
