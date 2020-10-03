@@ -79,6 +79,7 @@ const statusToName = {
   3: "Debug",
   4: "Feedback",
 };
+
 export default function DashboardsOverview() {
   const { data } = useDashboards();
   const { data: roles, isLoading } = useRoles();
@@ -97,55 +98,6 @@ export default function DashboardsOverview() {
   const [searchForm] = Form.useForm();
   const [filterForm] = Form.useForm();
   const [layoutForm] = Form.useForm();
-
-  function onFilterChnage(value: SelectValue) {
-    let values = filterForm.getFieldsValue();
-    if (value === undefined) {
-      setFilterValue(data);
-    } else {
-      setFilterValue(
-        data?.filter(
-          (dashboard) =>
-            dashboard.status.toString().includes(value.toString()) ||
-            dashboard.role?.includes(values.filler_by_role)
-        )
-      );
-    }
-  }
-
-  function onFilterRoleChnage(value: SelectValue) {
-    let values = filterForm.getFieldsValue();
-    if (value === undefined) {
-      setFilterValue(data);
-    } else {
-      setFilterValue(
-        data?.filter(
-          (dashboard) =>
-            dashboard.role?.includes(value.toString()) ||
-            dashboard.status?.toString().includes(values.filler_by_status)
-        )
-      );
-    }
-  }
-
-  // function onSearch(value) {
-  //   if (value === undefined) {
-  //     setFilterValue(data);
-  //   } else {
-  //     setFilterValue(() =>
-  //       data?.filter((dashboard) => {
-  //         return (
-  //           dashboard.name?.includes(value) ||
-  //           dashboard.baseUrl?.includes(value) ||
-  //           dashboard.dashboardFramework?.name?.includes(value) ||
-  //           dashboard.dashboardFramework?.version?.includes(value) ||
-  //           dashboard.environment?.includes(value) ||
-  //           statusToName[dashboard.status || 1] === value
-  //         );
-  //       })
-  //     );
-  //   }
-  // }
 
   function onSearch(value) {
     if (value === undefined || value === "") {
@@ -204,54 +156,6 @@ export default function DashboardsOverview() {
                         onChange={(event) => onSearch(event.target.value)}
                       />
                     </Form.Item>
-                  </Form.Item>
-                </Form>
-
-                <Form
-                  name="filte_dashboard"
-                  colon={false}
-                  layout="inline"
-                  form={filterForm}
-                >
-                  <Form.Item name="filter_by_status">
-                    <Select
-                      placeholder="Filter By Status"
-                      bordered={false}
-                      allowClear={true}
-                      dropdownMatchSelectWidth={true}
-                      onChange={onFilterChnage}
-                    >
-                      <Select.Option key={0} value={0}>
-                        Stopped
-                      </Select.Option>
-                      <Select.Option key={1} value={1}>
-                        Running
-                      </Select.Option>
-                      <Select.Option key={3} value={3}>
-                        Debug
-                      </Select.Option>
-                      <Select.Option key={4} value={4}>
-                        Feedback
-                      </Select.Option>
-                    </Select>
-                  </Form.Item>
-                  <Form.Item name="filter_by_role">
-                    <Select
-                      placeholder="Filter By Role"
-                      loading={isLoading}
-                      bordered={false}
-                      allowClear={true}
-                      dropdownMatchSelectWidth={true}
-                      onChange={onFilterRoleChnage}
-                    >
-                      {roles?.map((role) => {
-                        return (
-                          <Select.Option key={role.id} value={role.name}>
-                            {role.name}
-                          </Select.Option>
-                        );
-                      })}
-                    </Select>
                   </Form.Item>
                 </Form>
               </Space>
