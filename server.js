@@ -8,4 +8,4 @@ server.use(router);
 server.listen(3004, () => {
   console.log("JSON Server is running");
 });
-return server;
+
