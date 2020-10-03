@@ -39,7 +39,7 @@
     "umi": "^3.2.22"
   },
   "scripts": {
-    "start": "concurrently \"json-server db.json\" \"craco start\"",
+    "start": "concurrently \"yarn server\" \"craco start\"",
     "build": "craco build",
     "test": "craco test",
     "server": "node server.js",
