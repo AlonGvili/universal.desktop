@@ -208,6 +208,7 @@ export function capitalize(
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
+
 export function appSearch(
   key: string | number,
   fields: any,
@@ -218,8 +219,8 @@ export function appSearch(
 
   let uniqeKey = typeof key === "number" ? key.toString() : key;
   const search = new JsSearch.Search(uniqeKey);
-  // search.searchIndex = new JsSearch.UnorderedSearchIndex();
-  search.indexStrategy = new JsSearch.ExactWordIndexStrategy();
+  search.searchIndex = new JsSearch.UnorderedSearchIndex();
+  // search.indexStrategy = new JsSearch.ExactWordIndexStrategy();
 
   let fieldset: string[] | [string[]] = [];
   if (!Array.isArray(fields)) {

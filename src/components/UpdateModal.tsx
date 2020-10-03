@@ -6,25 +6,24 @@ import {
   UnlockOutlined,
   CloseOutlined,
   CheckOutlined,
-} from "@ant-design/icons/es/icons";
+} from "@ant-design/icons";
 import {
   useNewDashboard,
   useFrameworks,
   useEnvironments,
   useRoles,
   useNewestFramework,
-} from "../service-hooks";
+} from "service-hooks";
 import {
   Dashboard,
   Role,
   DashboardFramework,
   Environment,
   Feature,
-} from "../types";
+} from "types";
 import { ValidateStatus } from "antd/lib/form/FormItem";
 import { queryCache } from "react-query";
-// import useAppContext from "../AppContext";
-// import { AxiosError } from "axios";
+
 
 export default function DashboardModal(props: {
   isOpen: boolean;
@@ -42,7 +41,7 @@ export default function DashboardModal(props: {
     ValidateStatus
   >();
 
-//   const [isAuth, setIsAuth] = useState(false);
+  //   const [isAuth, setIsAuth] = useState(false);
 
   const formItemLayout = {
     labelCol: { span: 4 },
@@ -55,13 +54,12 @@ export default function DashboardModal(props: {
   const powershell = useEnvironments();
   const roles = useRoles();
 
-//   const { licensedFeatures } = useAppContext();
+  //   const { licensedFeatures } = useAppContext();
 
   function onOk() {
     form
       .validateFields()
       .then(async (values) => {
-        console.log("values", values);
         let newDashboard: Partial<Dashboard> = {
           ...values,
           environment:
@@ -75,7 +73,7 @@ export default function DashboardModal(props: {
         };
 
         addDashboard(newDashboard as Dashboard, {
-          onError: (error, dashboard, _) => {
+          onError: () => {
             message.error("Faild to add dashboard");
           },
         }).then(() => {
