@@ -35,7 +35,7 @@ import PSUTable from "components/Table";
 export async function fetchDashboards(): Promise<Dashboard[]> {
   const dashboards: Dashboard[] = await Axios.get(
     // `https://my-json-server.typicode.com/alongvili/psu/Dashboards`
-    `${window.location.origin}:3004/Dashboards`
+    `${window.location.origin}/Dashboards`
   ).then((res: AxiosResponse<Dashboard[]>) => res.data);
 
   dashboards.forEach((dashboard: Dashboard) => {
