@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Axios, { AxiosResponse, AxiosError } from "axios";
+import Axios, {  AxiosError } from "axios";
 import { queryCache, useQuery } from "react-query";
 import { Dashboard, Role } from "../types";
 import {
