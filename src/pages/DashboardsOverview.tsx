@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Axios, {  AxiosError } from "axios";
+import Axios, { AxiosError } from "axios";
 import { queryCache, useQuery } from "react-query";
 import { Dashboard, Role } from "../types";
 import {
@@ -16,18 +16,20 @@ import {
   AppstoreAddOutlined,
   AppstoreOutlined,
   CodeOutlined,
-  DeleteFilled,
-  EditFilled,
+  DeleteOutlined,
+  GlobalOutlined,
+  InfoCircleOutlined,
   TableOutlined,
 } from "@ant-design/icons";
 
 import CardHeader from "components/card/TitleAndDescription";
 import BodyLink from "components/card/BodyLink";
 import InfoSection from "components/card/InfoSection";
-import { Divider, Radio, Select, Tooltip } from "antd";
+// import TagsSection from "components/card/Tags";
+import { Divider, Popconfirm, Radio, Tag, Tooltip } from "antd";
 import { setPowerIconColor, appSearch } from "utilities/utils";
-import { SelectValue } from "antd/lib/select";
 import PSUTable from "components/Table";
+import { presetPrimaryColors } from "@ant-design/colors";
 
 // const byteSize = require("byte-size");
 // const url = `http://localhost:5000/api/v1`;
@@ -82,7 +84,6 @@ const statusToName = {
 
 export default function DashboardsOverview() {
   const { data } = useDashboards();
-  const { data: roles, isLoading } = useRoles();
   const [filterValue, setFilterValue] = useState<Dashboard[] | undefined>(
     () => {
       return data?.map((dashboard) => {
@@ -93,10 +94,9 @@ export default function DashboardsOverview() {
       });
     }
   );
-  const [layout, setLayout] = useState("table_layout");
+  const [layout, setLayout] = useState("grid_layout");
 
   const [searchForm] = Form.useForm();
-  const [filterForm] = Form.useForm();
   const [layoutForm] = Form.useForm();
 
   function onSearch(value) {
@@ -112,7 +112,7 @@ export default function DashboardsOverview() {
           "filePath",
           "baseUrl",
           "environment",
-          ["dashboardFramework","name"],
+          ["dashboardFramework", "name"],
           ["dashboardFramework", "version"],
         ],
         data,
@@ -142,14 +142,22 @@ export default function DashboardsOverview() {
                 >
                   <Form.Item>
                     <Typography style={{ marginBottom: 0 }}>
-                      <Typography.Title level={5} style={{ marginBottom: 0 }}>
-                        Search and Filter
+                      <Typography.Title
+                        level={5}
+                        style={{
+                          marginBottom: 0,
+                          fontSize: 20,
+                          fontVariant: "all-small-caps",
+                          fontFamily: "SFProDisplay-Black",
+                        }}
+                      >
+                        Dashboards
                       </Typography.Title>
                     </Typography>
                   </Form.Item>
                   <Form.Item>
                     <Form.Item name="search" noStyle>
-                      <Input.Search
+                      <Input
                         placeholder="Search for a dashboards"
                         bordered={false}
                         allowClear
@@ -160,8 +168,13 @@ export default function DashboardsOverview() {
                 </Form>
               </Space>
 
-              <Space>
-                <Button type="primary">Create New Dashboard</Button>
+              <Space size="large">
+                <Button
+                  type="primary"
+                  style={{ fontFamily: "SFProDisplay-Regular" }}
+                >
+                  Create New Dashboard
+                </Button>
                 <Form
                   name="layout_form"
                   layout="inline"
@@ -171,7 +184,7 @@ export default function DashboardsOverview() {
                   <Form.Item name="layout">
                     <Radio.Group
                       buttonStyle="solid"
-                      defaultValue="table_layout"
+                      defaultValue="grid_layout"
                     >
                       <Tooltip title="Table layout">
                         <Radio.Button
@@ -249,11 +262,81 @@ export default function DashboardsOverview() {
                   <Space
                     style={{ justifyContent: "space-between", width: "100%" }}
                   >
-                    <Button.Group>
-                      <Button icon={<DeleteFilled />} type="text" />
-                      <Button icon={<EditFilled />} type="text" />
+                    <Button.Group style={{ marginLeft: "-4px" }} size="small">
+                      <Popconfirm
+                        style={{
+                          fontFamily: "SFProDisplay-Regular",
+                        }}
+                        title={
+                          <Typography
+                            style={{ fontFamily: "SFProDisplay-Regular" }}
+                          >
+                            Delete this dashboard ?
+                          </Typography>
+                        }
+                        icon={
+                          <DeleteOutlined
+                            style={{ color: presetPrimaryColors["red"] }}
+                          />
+                        }
+                        okButtonProps={{
+                          danger: true,
+                          style: {
+                            fontFamily: "SFProDisplay-Regular",
+                          },
+                        }}
+                        cancelButtonProps={{
+                          style: {
+                            fontFamily: "SFProDisplay-Regular",
+                          },
+                        }}
+                        okText="Delete"
+                        placement="topLeft"
+                        arrowPointAtCenter
+                        autoAdjustOverflow
+                      >
+                        <Tooltip title="Delete" color="red">
+                          <Button
+                            icon={
+                              <Typography.Text
+                                type="secondary"
+                                style={{ fontSize: 14 }}
+                              >
+                                <DeleteOutlined />
+                              </Typography.Text>
+                            }
+                            type="text"
+                          />
+                        </Tooltip>
+                      </Popconfirm>
+                      <Tooltip title="Info">
+                        <Button
+                          icon={
+                            <Typography.Text
+                              type="secondary"
+                              style={{ fontSize: 14 }}
+                            >
+                              <InfoCircleOutlined />
+                            </Typography.Text>
+                          }
+                          type="text"
+                        />
+                      </Tooltip>
+                      <Tooltip title="View">
+                        <Button
+                          icon={
+                            <Typography.Text
+                              type="secondary"
+                              style={{ fontSize: 14 }}
+                            >
+                              <GlobalOutlined />
+                            </Typography.Text>
+                          }
+                          type="text"
+                        />
+                      </Tooltip>
                     </Button.Group>
-                    <Button.Group>
+                    <Button.Group size="small">
                       <Button
                         icon={setPowerIconColor(dashboard.status)}
                         type="text"

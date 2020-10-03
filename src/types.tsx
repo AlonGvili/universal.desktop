@@ -30,6 +30,7 @@ export type Dashboard = {
   disableAutoStart: boolean;
   autoReload: boolean;
   notes?: string;
+  tags?: Tag[];
   processId?: number;
   processName?: string;
   dashboardComponents?: DashboardComponent[];
@@ -247,3 +248,9 @@ export type Variable = {
   value: string;
   type: string;
 };
+
+export type Tag = {
+  id: number;
+  color: string;
+  label: string;
+}
