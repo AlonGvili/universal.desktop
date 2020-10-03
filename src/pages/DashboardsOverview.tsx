@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Axios, { AxiosResponse, AxiosError } from "axios";
 import { queryCache, useQuery } from "react-query";
-import { Dashboard } from "../types";
+import { Dashboard, Role } from "../types";
 import {
   Form,
   Input,
@@ -25,8 +25,7 @@ import CardHeader from "components/card/TitleAndDescription";
 import BodyLink from "components/card/BodyLink";
 import InfoSection from "components/card/InfoSection";
 import { Divider, Radio, Select, Tooltip } from "antd";
-import { setPowerIconColor } from "utilities/utils";
-// import { useDebounce } from "ahooks";
+import { setPowerIconColor, appSearch } from "utilities/utils";
 import { SelectValue } from "antd/lib/select";
 import PSUTable from "components/Table";
 
@@ -35,7 +34,8 @@ import PSUTable from "components/Table";
 
 export async function fetchDashboards(): Promise<Dashboard[]> {
   const dashboards: Dashboard[] = await Axios.get(
-    `https://my-json-server.typicode.com/alongvili/psu/Dashboards`
+    // `https://my-json-server.typicode.com/alongvili/psu/Dashboards`
+    `http://localhost:3004/Dashboards`
   ).then((res: AxiosResponse<Dashboard[]>) => res.data);
 
   dashboards.forEach((dashboard: Dashboard) => {
@@ -55,12 +55,41 @@ export function useDashboards() {
   });
 }
 
-// const { useBreakpoint } = Grid;
+export async function fetchRoles(): Promise<Role[]> {
+  const roles: Role[] = await Axios.get(`http://localhost:3004/Roles`).then(
+    (res: AxiosResponse<Role[]>) => res.data
+  );
 
+  roles.forEach((role: Role) => {
+    queryCache.setQueryData(["role", { roleId: role.id }], role);
+  });
+
+  return roles;
+}
+
+export function useRoles() {
+  return useQuery("roles", fetchRoles);
+}
+
+const statusToName = {
+  0: "Stopped",
+  1: "Running",
+  3: "Debug",
+  4: "Feedback",
+};
 export default function DashboardsOverview() {
-  // const breakpoint = useBreakpoint();
   const { data } = useDashboards();
-  const [filterValue, setFilterValue] = useState<Dashboard[] | undefined>(data);
+  const { data: roles, isLoading } = useRoles();
+  const [filterValue, setFilterValue] = useState<Dashboard[] | undefined>(
+    () => {
+      return data?.map((dashboard) => {
+        return Object.defineProperty(dashboard, "statusName", {
+          value: statusToName[dashboard.status],
+          writable: true,
+        });
+      });
+    }
+  );
   const [layout, setLayout] = useState("table_layout");
 
   const [searchForm] = Form.useForm();
@@ -68,36 +97,75 @@ export default function DashboardsOverview() {
   const [layoutForm] = Form.useForm();
 
   function onFilterChnage(value: SelectValue) {
+    let values = filterForm.getFieldsValue();
     if (value === undefined) {
       setFilterValue(data);
     } else {
-      setFilterValue(data?.filter((dashboard) => dashboard.status === value));
+      setFilterValue(
+        data?.filter(
+          (dashboard) =>
+            dashboard.status.toString().includes(value.toString()) ||
+            dashboard.role?.includes(values.filler_by_role)
+        )
+      );
     }
   }
 
-  const statusToName = {
-    0: "Stopped",
-    1: "Running",
-    3: "Debug",
-    4: "Feedback",
-  };
-
-  function onSearch(value) {
+  function onFilterRoleChnage(value: SelectValue) {
+    let values = filterForm.getFieldsValue();
     if (value === undefined) {
       setFilterValue(data);
     } else {
-      setFilterValue(() =>
-        data?.filter((dashboard) => {
-          return (
-            dashboard.name?.includes(value) ||
-            dashboard.baseUrl?.includes(value) ||
-            dashboard.dashboardFramework?.name?.includes(value) ||
-            dashboard.dashboardFramework?.version?.includes(value) ||
-            dashboard.powerShellVersion?.version?.includes(value) ||
-            statusToName[dashboard.status] === value
-          );
-        })
+      setFilterValue(
+        data?.filter(
+          (dashboard) =>
+            dashboard.role?.includes(value.toString()) ||
+            dashboard.status?.toString().includes(values.filler_by_status)
+        )
       );
+    }
+  }
+
+  // function onSearch(value) {
+  //   if (value === undefined) {
+  //     setFilterValue(data);
+  //   } else {
+  //     setFilterValue(() =>
+  //       data?.filter((dashboard) => {
+  //         return (
+  //           dashboard.name?.includes(value) ||
+  //           dashboard.baseUrl?.includes(value) ||
+  //           dashboard.dashboardFramework?.name?.includes(value) ||
+  //           dashboard.dashboardFramework?.version?.includes(value) ||
+  //           dashboard.environment?.includes(value) ||
+  //           statusToName[dashboard.status || 1] === value
+  //         );
+  //       })
+  //     );
+  //   }
+  // }
+
+  function onSearch(value) {
+    if (value === undefined || value === "") {
+      setFilterValue(data);
+    } else {
+      let results: Dashboard[] = appSearch(
+        "id",
+        [
+          "name",
+          "role",
+          "statusName",
+          "filePath",
+          "baseUrl",
+          "environment",
+          ["dashboardFramework","name"],
+          ["dashboardFramework", "version"],
+        ],
+        data,
+        value
+      );
+      console.log("results", results);
+      setFilterValue(results);
     }
   }
 
@@ -165,30 +233,60 @@ export default function DashboardsOverview() {
                       </Select.Option>
                     </Select>
                   </Form.Item>
+                  <Form.Item name="filter_by_role">
+                    <Select
+                      placeholder="Filter By Role"
+                      loading={isLoading}
+                      bordered={false}
+                      allowClear={true}
+                      dropdownMatchSelectWidth={true}
+                      onChange={onFilterRoleChnage}
+                    >
+                      {roles?.map((role) => {
+                        return (
+                          <Select.Option key={role.id} value={role.name}>
+                            {role.name}
+                          </Select.Option>
+                        );
+                      })}
+                    </Select>
+                  </Form.Item>
                 </Form>
               </Space>
 
-              <Form
-                name="layout_form"
-                layout="inline"
-                form={layoutForm}
-                onValuesChange={onLayoutChnage}
-              >
-                <Form.Item name="layout">
-                  <Radio.Group buttonStyle="solid" defaultValue="table_layout">
-                    <Tooltip title="Table layout">
-                      <Radio.Button value="table_layout">
-                        <TableOutlined />
-                      </Radio.Button>
-                    </Tooltip>
-                    <Tooltip title="Grid layout">
-                      <Radio.Button value="grid_layout">
-                        <AppstoreOutlined />
-                      </Radio.Button>
-                    </Tooltip>
-                  </Radio.Group>
-                </Form.Item>
-              </Form>
+              <Space>
+                <Button type="primary">Create New Dashboard</Button>
+                <Form
+                  name="layout_form"
+                  layout="inline"
+                  form={layoutForm}
+                  onValuesChange={onLayoutChnage}
+                >
+                  <Form.Item name="layout">
+                    <Radio.Group
+                      buttonStyle="solid"
+                      defaultValue="table_layout"
+                    >
+                      <Tooltip title="Table layout">
+                        <Radio.Button
+                          value="table_layout"
+                          style={{ border: "none" }}
+                        >
+                          <TableOutlined />
+                        </Radio.Button>
+                      </Tooltip>
+                      <Tooltip title="Grid layout">
+                        <Radio.Button
+                          value="grid_layout"
+                          style={{ border: "none" }}
+                        >
+                          <AppstoreOutlined />
+                        </Radio.Button>
+                      </Tooltip>
+                    </Radio.Group>
+                  </Form.Item>
+                </Form>
+              </Space>
             </Space>
           </Card>
         </Col>
@@ -226,11 +324,11 @@ export default function DashboardsOverview() {
                         <Space direction="vertical">
                           <Space>
                             <CodeOutlined />
-                            {`PowerShell ${dashboard.powerShellVersion}`}
+                            {`PowerShell ${dashboard.environment}`}
                           </Space>
                           <Space>
                             <AppstoreAddOutlined />
-                            {`${dashboard.dashboardFramework?.name} ${dashboard.dashboardFramework.version}`}
+                            {`${dashboard.dashboardFramework?.name} ${dashboard.dashboardFramework?.version}`}
                           </Space>
                         </Space>
                       </InfoSection>

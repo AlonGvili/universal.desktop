@@ -6,7 +6,7 @@ export default function BodyLink({
   id,
   children,
 }: {
-  id: number;
+  id: number | undefined;
   children: typeof Children[];
 }) {
   const location = useLocation();

@@ -1,9 +1,10 @@
 import React from "react";
 import { Space, Typography } from "antd/es";
+import { capitalize } from "utilities/utils";
 
 export default function CardHeader(props: {
-  name: string;
-  description: string;
+  name: string | string[] | ((value: string) => string);
+  description?: string;
 }) {
   return (
     <Space direction="vertical" style={{ width: "100%" }}>
@@ -15,7 +16,7 @@ export default function CardHeader(props: {
           fontFamily: "SFProDisplay-Semibold",
         }}
       >
-        {props.name}
+        { capitalize(props.name) }
       </Typography.Text>
       <Typography.Paragraph
         ellipsis

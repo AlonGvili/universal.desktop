@@ -1,3 +1,4 @@
+import { StatusType } from "utilities/utils";
 
 export type AppToken = {
   identity: Identity;
@@ -17,20 +18,21 @@ export type AuthenticationMethod = {
 export type Dashboard = {
   id: number;
   baseUrl: string;
+  description?: string;
   dashboardFramework: DashboardFramework;
-  powerShellVersion: PowerShellVersion;
+  environment: string;
   name: string;
   content: string;
-  description: string;
-  status: number;
+  status: StatusType;
+  role?: Role["name"];
   filePath: string;
   authenticated: boolean;
   disableAutoStart: boolean;
   autoReload: boolean;
-  notes: string;
-  processId: number;
-  processName: string;
-  dashboardComponents: DashboardComponent[];
+  notes?: string;
+  processId?: number;
+  processName?: string;
+  dashboardComponents?: DashboardComponent[];
 };
 
 export type DashboardLog = {
@@ -50,34 +52,23 @@ export type DashboardEndpoint = {
   averageExecutionTime: number;
 };
 
-export type DashboardFramework = Partial<{
+export type DashboardFramework = {
   id: number;
-  name: string;
-  version: string;
-  path: string;
-}>;
-
-export type DashboardComponent = {
-  id?: number;
   name: string;
   version: string;
   path: string;
 };
 
-export type DashboardMarketplaceStatistics = {
+export type DashboardComponent = {
   id: number;
-  timestamp: string;
-  totalModules: number;
-  totalTools: number;
-  totalControls: number;
-  totalDashboards: number;
-  totalDownloads: number;
+  name: string;
+  version: string;
+  path: string;
 };
 
 export type DashboardMarketplaceOverview = {
   newPackages?: Array<DashboardMarketplaceModule>;
   mostDownloadedPackages?: Array<DashboardMarketplaceModule>;
-  lastThirdyDaysStatistics?: Array<DashboardMarketplaceStatistics>;
 };
 
 export type DashboardMarketplaceBrowsePage = {
@@ -110,6 +101,15 @@ export type DashboardMarketplaceModule = {
   type: MarketplaceModuleType;
 };
 
+export type Environment = {
+  id: number;
+  name: string;
+  path: string;
+  arguments?: Array<string>;
+  modules?: Array<string>;
+  variables: Array<string>;
+};
+
 export enum MarketplaceModuleType {
   Dashboard,
   Control,
@@ -125,7 +125,7 @@ export type DashboardSession = {
 };
 
 export type Endpoint = {
-  id: number;
+  id?: number;
   url?: string;
   method?: string;
   scriptBlock?: string;
@@ -169,11 +169,18 @@ export type Identity = {
   role?: Role;
 };
 
-export type PowerShellVersion = Partial<{
+export type PowerShellVersion = {
   id: number;
   version: string;
   path: string;
-}>;
+};
+
+export type RateLimit = {
+  endpoint: string;
+  id?: number;
+  limit: number;
+  period: string;
+};
 
 export type Role = {
   name: string;
@@ -195,72 +202,14 @@ export type Script = {
   maxHistory?: number;
 };
 
-export type Computer = { id: number; name: any };
-
-export type Job = {
-  activity: string;
-  agent: any;
-  appToken: AppToken;
-  children: any;
-  computer: Computer;
-  computerName: string;
-  createdTime: string;
-  credential: null;
-  currentOperation: any;
-  debug: boolean;
-  endTime: string;
-  errorAction: number;
-  identity: Identity;
-  id: number;
-  name: string;
-  role: Role;
-  source: number;
-  jobOutput: { id: number; log: string };
-  notes: string | undefined;
-  output: null;
-  parameters: any;
-  parentJob: any;
-  parentLineNumber: number;
-  percentComplete: number;
-  port: number;
-  powerShellVersion: PowerShellVersion["version"];
-  processId: number | undefined;
-  runspaceId: number | undefined;
-  script: Script;
-  scriptCommitId: string | undefined;
-  secondsRemaining: number;
-  startTime: string;
-  status: number;
-  statusDescription: string;
-};
-
-export type JobDayHistory = {
-  count: number;
-  jobDay: string;
-};
-
-export type ScriptJobDayHistory = {
-  count: number;
-  jobDay: string;
-  scriptId: number;
+export type Settings = {
+  rateLimitIpAddressAllowList?: Array<string>;
+  rateLimitEndpointAllowList?: Array<string>;
+  rateLimitClientAllowList?: Array<string>;
 };
 
 export type Stats = {
-  id: number;
-  jobDayHistory: Array<JobDayHistory>;
-  jobsFailedAllTime: number;
-  jobsFailedToday: number;
-  jobsRunAllTime: number;
   jobsRunToday: number;
-  jobsSuccessAllTime: number;
-  jobsWaitingOnFeedback: number;
-  last10Jobs: Array<Job>;
-  last10JobsWaitingOnFeedback: Array<Job>;
-  manualJobsExecuted: number;
-  runningJobs: number;
-  scheduledJobsExecuted: number;
-  scriptJobDayHistory: Array<ScriptJobDayHistory>;
-  timeSavedSeconds: number;
 };
 
 export type PublishedFolder = {
@@ -284,7 +233,7 @@ export type Update = {
   notes?: string;
 };
 
-declare const ThemeModeTypes: ["light", "dark"];
+declare const ThemeModeTypes: ["default", "dark", "compact"];
 export declare type ThemeModeType = typeof ThemeModeTypes[number];
 
 export type Theme = {
@@ -292,9 +241,9 @@ export type Theme = {
   color: string;
 };
 
-export type Accessible =
-  | {
-      username: string;
-      roles: Array<string>;
-    }
-  | { redirecting: boolean };
+export type Variable = {
+  id: number;
+  name: string;
+  value: string;
+  type: string;
+};

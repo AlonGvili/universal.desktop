@@ -4,6 +4,8 @@ import { presetPrimaryColors } from "@ant-design/colors";
 
 import { Badge, Tag, Tooltip } from "antd";
 
+import * as JsSearch from "js-search";
+
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
@@ -13,6 +15,8 @@ import {
   MinusCircleOutlined,
   FieldTimeOutlined,
   PoweroffOutlined,
+  LockFilled,
+  UnlockFilled,
 } from "@ant-design/icons";
 
 export declare const MethodName: ["GET", "POST", "DELETE", "PUT"];
@@ -37,14 +41,13 @@ export function setMethodColor(method: MethodType | undefined) {
   }
 }
 
-
 /**
  * Set the power button icon color base on the dashboard current status.
  * @param status
  * @description Will return the currect icon color base on the current dashboard status.
  * @example setPowerIconColor(0)
  */
-export function setPowerIconColor(status: number) {
+export function setPowerIconColor(status: number | undefined) {
   switch (status) {
     case 0:
       return (
@@ -59,11 +62,11 @@ export function setPowerIconColor(status: number) {
     case 1:
       return (
         <Tooltip title="Dashboard Is Running" color="blue">
-        <PoweroffOutlined
-          style={{
-            color: presetPrimaryColors["blue"],
-          }}
-        />
+          <PoweroffOutlined
+            style={{
+              color: presetPrimaryColors["blue"],
+            }}
+          />
         </Tooltip>
       );
     case 3:
@@ -79,11 +82,42 @@ export function setPowerIconColor(status: number) {
     case 4:
       return (
         <Tooltip title="Dashboard Is Waiting For Feedback" color="gold">
-        <PoweroffOutlined
-          style={{
-            color: presetPrimaryColors["gold"],
-          }}
-        />
+          <PoweroffOutlined
+            style={{
+              color: presetPrimaryColors["gold"],
+            }}
+          />
+        </Tooltip>
+      );
+  }
+}
+
+/**
+ * Set the Auth icon color.
+ * @param authenticated
+ * @description Set the Auth icon color base on if dashboard authentication is enabled or not.
+ * @example setAuthIcon(true)
+ */
+export function setAuthIcon(authenticated: boolean) {
+  switch (authenticated) {
+    case true:
+      return (
+        <Tooltip title="Authentication Enabled" color="blue">
+          <LockFilled
+            style={{
+              color: presetPrimaryColors["blue"],
+            }}
+          />
+        </Tooltip>
+      );
+    case false:
+      return (
+        <Tooltip title="Authentication Disabled" color="red">
+          <UnlockFilled
+            style={{
+              color: presetPrimaryColors["red"],
+            }}
+          />
         </Tooltip>
       );
   }
@@ -106,7 +140,7 @@ export function setStatusColor(status: StatusType) {
     case 1:
       return <Badge status="processing" text="Running" />;
     case 3:
-      return <Badge status="default" text="NA" />;
+      return <Badge status="default" text="Debug Mode" />;
     case 4:
       return <Badge status="warning" text="Waiting for feedback" />;
   }
@@ -164,4 +198,39 @@ export function setStatusTag(status: number) {
         </Tag>
       );
   }
+}
+
+export function capitalize(
+  text: undefined | string | string[] | ((value: string) => string)
+) {
+  if (typeof text !== "string") return "";
+  if (text === undefined) return "";
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+export function appSearch(
+  key: string | number,
+  fields: any,
+  data: object | object[] | undefined,
+  term: string
+) {
+  if (data === undefined) return;
+
+  let uniqeKey = typeof key === "number" ? key.toString() : key;
+  const search = new JsSearch.Search(uniqeKey);
+  // search.searchIndex = new JsSearch.UnorderedSearchIndex();
+  search.indexStrategy = new JsSearch.ExactWordIndexStrategy();
+
+  let fieldset: string[] | [string[]] = [];
+  if (!Array.isArray(fields)) {
+    fieldset.push(fields);
+  }
+  if (Array.isArray(fields)) {
+    fieldset = fields;
+  }
+  fieldset.forEach((field) => search.addIndex(field));
+
+  search.addDocuments(Array.isArray(data) ? data : [data]);
+
+  return search.search(term);
 }
