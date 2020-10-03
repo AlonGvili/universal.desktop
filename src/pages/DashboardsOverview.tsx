@@ -25,6 +25,7 @@ import {
 import CardHeader from "components/card/TitleAndDescription";
 import BodyLink from "components/card/BodyLink";
 import InfoSection from "components/card/InfoSection";
+import UpdateModal from "components/UpdateModal";
 // import TagsSection from "components/card/Tags";
 import { Divider, Popconfirm, Radio, Tag, Tooltip } from "antd";
 import { setPowerIconColor, appSearch } from "utilities/utils";
@@ -95,6 +96,7 @@ export default function DashboardsOverview() {
     }
   );
   const [layout, setLayout] = useState("grid_layout");
+  const [isOpen, setIsOpen] = useState(false);
 
   const [searchForm] = Form.useForm();
   const [layoutForm] = Form.useForm();
@@ -172,6 +174,7 @@ export default function DashboardsOverview() {
                 <Button
                   type="primary"
                   style={{ fontFamily: "SFProDisplay-Regular" }}
+                  onClick={() => setIsOpen(true)}
                 >
                   Create New Dashboard
                 </Button>
@@ -182,10 +185,7 @@ export default function DashboardsOverview() {
                   onValuesChange={onLayoutChnage}
                 >
                   <Form.Item name="layout">
-                    <Radio.Group
-                      buttonStyle="solid"
-                      defaultValue="grid_layout"
-                    >
+                    <Radio.Group buttonStyle="solid" defaultValue="grid_layout">
                       <Tooltip title="Table layout">
                         <Radio.Button
                           value="table_layout"
@@ -351,6 +351,11 @@ export default function DashboardsOverview() {
           <PSUTable data={filterValue} />
         )}
       </Row>
+      <UpdateModal
+        isImportModal={false}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
     </>
   );
 }
