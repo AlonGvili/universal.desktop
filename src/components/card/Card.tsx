@@ -19,6 +19,7 @@ import BodyLink from "components/card/BodyLink";
 import InfoSection from "components/card/InfoSection";
 import CardHeader from "components/card/TitleAndDescription";
 import React from "react";
+import { Link } from "react-router-dom";
 import { Dashboard } from "types";
 import { setPowerIconColor } from "utilities/utils";
 
@@ -97,14 +98,16 @@ export default function DashboardCard(props: { dashboard: Dashboard }) {
             </Tooltip>
           </Popconfirm>
           <Tooltip title="Info">
-            <Button
-              icon={
-                <Typography.Text type="secondary" style={{ fontSize: 14 }}>
-                  <InfoCircleOutlined />
-                </Typography.Text>
-              }
-              type="text"
-            />
+            <Link to={`dashboards/${dashboard.id}`}>
+              <Button
+                icon={
+                  <Typography.Text type="secondary" style={{ fontSize: 14 }}>
+                    <InfoCircleOutlined />
+                  </Typography.Text>
+                }
+                type="text"
+              />
+            </Link>
           </Tooltip>
           <Tooltip title="View">
             <Button
