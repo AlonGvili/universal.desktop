@@ -1,9 +1,5 @@
 import {
-  CheckOutlined,
-  CloseOutlined,
   InfoCircleOutlined,
-  LockOutlined,
-  UnlockOutlined,
 } from "@ant-design/icons";
 import {
   Form,
@@ -320,10 +316,7 @@ export default function NewDashboardModal(props: {
             </Select>
           </Form.Item>
           <Form.Item name="dashboardFramework" label="Framework">
-            <Select
-            // defaultValue={latestFramework.data?.id}
-            // loading={latestFramework.isLoading}
-            >
+            <Select>
               {frameworks.data?.map((framework: DashboardFramework) => (
                 <Select.Option
                   key={framework.id}
@@ -334,31 +327,6 @@ export default function NewDashboardModal(props: {
           </Form.Item>
           <Form.Item name="authenticated" label="Authentication">
             <Switch checkedChildren="Enabled" unCheckedChildren="Disabled" />
-
-            {/* <Radio.Group
-              buttonStyle="solid"
-              size="small"
-              disabled={[2].indexOf(Feature.Dashboard) === -1}
-            >
-              <Radio.Button value={true}>
-                <Tooltip
-                  arrowPointAtCenter={true}
-                  autoAdjustOverflow={true}
-                  title="Enable dashboard authentication"
-                >
-                  <LockOutlined />
-                </Tooltip>
-              </Radio.Button>
-              <Radio.Button value={false}>
-                <Tooltip
-                  arrowPointAtCenter={true}
-                  autoAdjustOverflow={true}
-                  title="Disable dashboard authentication"
-                >
-                  <UnlockOutlined />
-                </Tooltip>
-              </Radio.Button>
-            </Radio.Group> */}
           </Form.Item>
           <Form.Item
             noStyle
@@ -382,26 +350,6 @@ export default function NewDashboardModal(props: {
           </Form.Item>
           <Form.Item name="disableAutoStart" label="AutoStart">
             <Switch checkedChildren="Yes" unCheckedChildren="No" />
-            {/* <Radio.Group buttonStyle="solid" size="small">
-              <Radio.Button value={true}>
-                <Tooltip
-                  arrowPointAtCenter={true}
-                  autoAdjustOverflow={true}
-                  title="Disable dashboard auto start"
-                >
-                  <CloseOutlined />
-                </Tooltip>
-              </Radio.Button>
-              <Radio.Button value={false}>
-                <Tooltip
-                  arrowPointAtCenter={true}
-                  autoAdjustOverflow={true}
-                  title="Enable dashboard auto start"
-                >
-                  <CheckOutlined />
-                </Tooltip>
-              </Radio.Button>
-            </Radio.Group> */}
           </Form.Item>
         </Form>
       </Space>
