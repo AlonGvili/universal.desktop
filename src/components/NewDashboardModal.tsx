@@ -27,7 +27,6 @@ import {
   Dashboard,
   DashboardFramework,
   Environment,
-  Feature,
   Role,
 } from "types";
 
