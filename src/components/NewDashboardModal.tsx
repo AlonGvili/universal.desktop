@@ -1,12 +1,9 @@
 import {
   CheckOutlined,
   CloseOutlined,
-  ImportOutlined,
   InfoCircleOutlined,
   LockOutlined,
-  PlusOutlined,
   UnlockOutlined,
-  UploadOutlined,
 } from "@ant-design/icons";
 import {
   Form,

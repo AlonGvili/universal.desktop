@@ -11,11 +11,11 @@ import {
   SyncOutlined,
   UnlockFilled,
 } from "@ant-design/icons";
-import { Badge, message, notification, Tag, Tooltip } from "antd";
-import Axios from "axios";
+import { Badge, Tag, Tooltip } from "antd";
+// import Axios from "axios";
 import * as JsSearch from "js-search";
-import React, { useRef } from "react";
-import { Observable } from "rxjs";
+import React from "react";
+// import { Observable } from "rxjs";
 export declare const MethodName: ["GET", "POST", "DELETE", "PUT"];
 export declare type MethodType = typeof MethodName[number];
 
