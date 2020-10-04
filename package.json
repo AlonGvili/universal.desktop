@@ -34,6 +34,7 @@
     "react-query": "^2.23.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
+    "rxjs": "^6.6.3",
     "source-map-explorer": "^2.5.0",
     "typescript": "3.9.2",
     "umi": "^3.2.22"

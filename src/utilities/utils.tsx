@@ -1,24 +1,21 @@
-import React from "react";
-
 import { presetPrimaryColors } from "@ant-design/colors";
-
-import { Badge, Tag, Tooltip } from "antd";
-
-import * as JsSearch from "js-search";
-
 import {
   CheckCircleOutlined,
+  ClockCircleOutlined,
   CloseCircleOutlined,
   ExclamationCircleOutlined,
-  ClockCircleOutlined,
-  SyncOutlined,
-  MinusCircleOutlined,
   FieldTimeOutlined,
-  PoweroffOutlined,
   LockFilled,
+  MinusCircleOutlined,
+  PoweroffOutlined,
+  SyncOutlined,
   UnlockFilled,
 } from "@ant-design/icons";
-
+import { Badge, message, notification, Tag, Tooltip } from "antd";
+import Axios from "axios";
+import * as JsSearch from "js-search";
+import React, { useRef } from "react";
+import { Observable } from "rxjs";
 export declare const MethodName: ["GET", "POST", "DELETE", "PUT"];
 export declare type MethodType = typeof MethodName[number];
 
@@ -208,7 +205,6 @@ export function capitalize(
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
-
 export function appSearch(
   key: string | number,
   fields: any,
@@ -220,7 +216,6 @@ export function appSearch(
   let uniqeKey = typeof key === "number" ? key.toString() : key;
   const search = new JsSearch.Search(uniqeKey);
   search.searchIndex = new JsSearch.UnorderedSearchIndex();
-  // search.indexStrategy = new JsSearch.ExactWordIndexStrategy();
 
   let fieldset: string[] | [string[]] = [];
   if (!Array.isArray(fields)) {

@@ -1,23 +1,23 @@
 // import React from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { useQuery, queryCache, useMutation } from "react-query";
+import { queryCache, useMutation, useQuery } from "react-query";
 import {
   Dashboard,
-  DashboardFramework,
-  PowerShellVersion,
   DashboardComponent,
   DashboardDiagnostics,
+  DashboardFramework,
   DashboardLog,
+  Endpoint,
   Environment,
-  Part,
-  RateLimit,
-  Variable,
-  Settings,
+  Feature,
   License,
-  Endpoint, Feature, Role 
+  Part,
+  PowerShellVersion,
+  RateLimit,
+  Role,
+  Settings,
+  Variable,
 } from "./types";
-
-// import { Role } from "./dashboard/dashboardTypes";
 
 const url = `/api/v1`;
 
@@ -48,23 +48,24 @@ export async function fetchDashboardLog(id: number): Promise<DashboardLog> {
 }
 
 export async function fetchDashboards(): Promise<Dashboard[]> {
-  const dashboards: Dashboard[] = await axios
-    .get(`${url}/dashboard`)
-    .then((res: AxiosResponse<Dashboard[]>) => res.data);
+  const dashboards = await axios
+    .get(`https://raw.githubusercontent.com/AlonGvili/psu/master/db.json`)
+    .then((res) => res.data);
 
-  dashboards.forEach((dashboard: Dashboard) => {
+  dashboards.Dashboards.forEach((dashboard: Dashboard) => {
     queryCache.setQueryData(
       ["dashboard", { dashboardId: dashboard.id }],
       dashboard
     );
   });
 
-  return dashboards;
+  return dashboards.Dashboards;
 }
 
 export function useDashboards() {
   return useQuery("dashboards", fetchDashboards, {
-    isDataEqual: (oldData, newData) => oldData === newData,
+    onError: (error: AxiosError) => error,
+    suspense: true,
   });
 }
 
@@ -338,9 +339,11 @@ export function useComponents() {
 
 // Get all frameworks
 export async function fetchFrameworks(): Promise<DashboardFramework[]> {
-  return await axios
-    .get(`${url}/dashboardframework`)
-    .then((res: AxiosResponse<DashboardFramework[]>) => res.data);
+  const frameworks = await axios
+    .get(`https://raw.githubusercontent.com/AlonGvili/psu/master/db.json`)
+    .then((res) => res.data);
+
+  return frameworks.Frameworks;
 }
 
 export function useFrameworks() {
@@ -348,10 +351,12 @@ export function useFrameworks() {
 }
 
 // Get the newest framework.
-export async function fetchNewestFramework(): Promise<DashboardFramework> {
-  return await axios
-    .get(`${url}/dashboardframework/newest`)
-    .then((res: AxiosResponse<DashboardFramework>) => res.data);
+export async function fetchNewestFramework() {
+  const newestFramework = await axios
+    .get(`https://raw.githubusercontent.com/AlonGvili/psu/master/db.json`)
+    .then((res) => res.data);
+
+  return newestFramework.NewestFramework;
 }
 
 export function useNewestFramework() {
@@ -607,8 +612,10 @@ export function useDeleteEndpoint() {
           "endpoints"
         );
 
-        queryCache.setQueryData<Endpoint[] | undefined>("endpoints", (old: Endpoint[] | undefined) =>
-          old?.filter((endpoint) => endpoint.id !== endpointId)
+        queryCache.setQueryData<Endpoint[] | undefined>(
+          "endpoints",
+          (old: Endpoint[] | undefined) =>
+            old?.filter((endpoint) => endpoint.id !== endpointId)
         );
 
         return () => queryCache.setQueryData("endpoints", oldEndpoints);
@@ -812,15 +819,15 @@ export function useNewRateLimit() {
 */
 
 export async function fetchRoles(): Promise<Role[]> {
-  const roles: Role[] = await axios
-    .get(`${url}/role?t=${getTimestamp()}`)
-    .then((res: AxiosResponse<Role[]>) => res.data);
+  const roles = await axios
+    .get(`https://raw.githubusercontent.com/AlonGvili/psu/master/db.json`)
+    .then((res) => res.data);
 
-  roles.forEach((role: Role) => {
+  roles.Roles.forEach((role: Role) => {
     queryCache.setQueryData(["role", { roleId: role.id }], role);
   });
 
-  return roles;
+  return roles.Roles;
 }
 
 export function useRoles() {
