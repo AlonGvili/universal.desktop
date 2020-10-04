@@ -13,6 +13,7 @@ import {
   Radio,
   Select,
   Space,
+  Switch,
   Tooltip,
   Typography,
 } from "antd";
@@ -51,8 +52,8 @@ export default function NewDashboardModal(props: {
   const [dashboardOption, setDashboardOption] = useState("new");
 
   const formItemLayout = {
-    labelCol: { span: 5 },
-    wrapperCol: { span: 19 },
+    labelCol: { span: 6 },
+    wrapperCol: { span: 18 },
   };
 
   const [form] = Form.useForm();
@@ -237,6 +238,8 @@ export default function NewDashboardModal(props: {
         <Form
           {...formItemLayout}
           form={form}
+          labelAlign="left"
+          requiredMark={false}
           name="dashboard_modal"
           initialValues={{
             baseUrl: "/dashboard",
@@ -329,8 +332,10 @@ export default function NewDashboardModal(props: {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name="authenticated" label="Auth">
-            <Radio.Group
+          <Form.Item name="authenticated" label="Authentication">
+            <Switch checkedChildren="Enabled" unCheckedChildren="Disabled" />
+
+            {/* <Radio.Group
               buttonStyle="solid"
               size="small"
               disabled={[2].indexOf(Feature.Dashboard) === -1}
@@ -353,7 +358,7 @@ export default function NewDashboardModal(props: {
                   <UnlockOutlined />
                 </Tooltip>
               </Radio.Button>
-            </Radio.Group>
+            </Radio.Group> */}
           </Form.Item>
           <Form.Item
             noStyle
@@ -376,7 +381,8 @@ export default function NewDashboardModal(props: {
             }}
           </Form.Item>
           <Form.Item name="disableAutoStart" label="AutoStart">
-            <Radio.Group buttonStyle="solid" size="small">
+            <Switch checkedChildren="Yes" unCheckedChildren="No" />
+            {/* <Radio.Group buttonStyle="solid" size="small">
               <Radio.Button value={true}>
                 <Tooltip
                   arrowPointAtCenter={true}
@@ -395,7 +401,7 @@ export default function NewDashboardModal(props: {
                   <CheckOutlined />
                 </Tooltip>
               </Radio.Button>
-            </Radio.Group>
+            </Radio.Group> */}
           </Form.Item>
         </Form>
       </Space>

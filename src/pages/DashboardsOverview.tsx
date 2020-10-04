@@ -37,7 +37,6 @@ const statusToName = {
 
 export default function DashboardsOverview() {
   const { data } = useDashboards();
-  console.log("data",data)
   const [filterValue, setFilterValue] = useState<Dashboard[] | undefined>(
     () => {
       return data?.map((dashboard) => {
