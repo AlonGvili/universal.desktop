@@ -30,7 +30,7 @@ export default function DashboardCard(props: { dashboard: Dashboard }) {
     <Card
       bodyStyle={{ padding: 24 }}
       bordered={false}
-      style={{ minWidth: 280, height: "100%" }}
+      style={{  height: "100%" }}
       headStyle={{ borderBottom: "unset" }}
       hoverable
     >

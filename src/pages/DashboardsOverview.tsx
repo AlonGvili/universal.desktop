@@ -181,8 +181,10 @@ export default function DashboardsOverview() {
             return (
               <Col
                 key={index}
-                lg={{ span: 6 }}
-                md={{ span: 12 }}
+                xxl={{ span: 6 }}
+                xl={{ span: 6 }}
+                lg={{ span: 8 }}
+                md={{ span: 8 }}
                 sm={{ span: 12 }}
                 xs={{ span: 24 }}
               >
