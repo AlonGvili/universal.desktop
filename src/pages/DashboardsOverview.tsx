@@ -7,10 +7,10 @@ import {
   Typography,
   Row,
   Col,
-  Space,
   Card,
   Radio,
   Tooltip,
+  Grid,
 } from "antd";
 import { AppstoreOutlined, TableOutlined } from "@ant-design/icons";
 import { appSearch } from "utilities/utils";
@@ -35,6 +35,8 @@ const statusToName = {
   4: "Feedback",
 };
 
+const { useBreakpoint } = Grid;
+
 export default function DashboardsOverview() {
   const { data } = useDashboards();
   const [filterValue, setFilterValue] = useState<Dashboard[] | undefined>(
@@ -47,6 +49,8 @@ export default function DashboardsOverview() {
       });
     }
   );
+
+  const { xs } = useBreakpoint();
 
   const [layout, setLayout] = useState("grid_layout");
   const [isOpen, setIsOpen] = useState(false);
@@ -84,10 +88,12 @@ export default function DashboardsOverview() {
   return (
     <>
       <Row gutter={[16, 16]}>
-        <Col span={24}>
-          <Card bordered={false}>
-            <Space style={{ justifyContent: "space-between", width: "100%" }}>
-              <Space>
+        <Col flex={1}>
+          <Card
+            bordered={false}
+          >
+            <Row gutter={xs ? [16,16] : 16}>
+              <Col flex={1}>
                 <Form
                   colon={false}
                   name="search_dashboard"
@@ -95,7 +101,7 @@ export default function DashboardsOverview() {
                   form={searchForm}
                 >
                   <Form.Item>
-                    <Typography style={{ marginBottom: 0 }}>
+                    <Typography>
                       <Typography.Title
                         level={5}
                         style={{
@@ -109,35 +115,40 @@ export default function DashboardsOverview() {
                       </Typography.Title>
                     </Typography>
                   </Form.Item>
-                  <Form.Item>
-                    <Form.Item name="search" noStyle>
-                      <Input
-                        placeholder="Search for a dashboards"
-                        bordered={false}
-                        allowClear
-                        onChange={(event) => onSearch(event.target.value)}
-                      />
-                    </Form.Item>
+                  <Form.Item name="search">
+                    <Input
+                      placeholder="Search for a dashboards"
+                      bordered={false}
+                      style={{ paddingLeft: 0 }}
+                      allowClear
+                      onChange={(event) => onSearch(event.target.value)}
+                    />
                   </Form.Item>
                 </Form>
-              </Space>
-
-              <Space size="large">
-                <Button
-                  type="primary"
-                  style={{ fontFamily: "SFProDisplay-Regular" }}
-                  onClick={() => setIsOpen(true)}
-                >
-                  Create New Dashboard
-                </Button>
+              </Col>
+              <Col>
                 <Form
+                  colon={false}
                   name="layout_form"
                   layout="inline"
                   form={layoutForm}
                   onValuesChange={onLayoutChnage}
                 >
+                  <Form.Item>
+                    <Button
+                      type="primary"
+                      style={{ fontFamily: "SFProDisplay-Regular", marginBottom: xs ? 16 : undefined  }}
+                      onClick={() => setIsOpen(true)}
+                    >
+                      Create New Dashboard
+                    </Button>
+                  </Form.Item>
                   <Form.Item name="layout">
-                    <Radio.Group buttonStyle="solid" defaultValue="grid_layout">
+                    <Radio.Group
+                      optionType="button"
+                      buttonStyle="solid"
+                      defaultValue="grid_layout"
+                    >
                       <Tooltip title="Table layout">
                         <Radio.Button
                           value="table_layout"
@@ -157,8 +168,10 @@ export default function DashboardsOverview() {
                     </Radio.Group>
                   </Form.Item>
                 </Form>
-              </Space>
-            </Space>
+              </Col>
+              {/* </Space> */}
+              {/* </Space> */}
+            </Row>
           </Card>
         </Col>
       </Row>

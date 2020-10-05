@@ -7,31 +7,33 @@ import { Route, Switch } from "react-router-dom";
 import Apis from "routes/Apis";
 import Dashboards from "routes/Dashboards";
 import Automation from "routes/Automation";
-import Settings from "routes/Settings"
-import Security from "routes/Security"
+import Settings from "routes/Settings";
+import Security from "routes/Security";
 
 const PrimaryLayout = () => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <AppBar />
-      <Layout.Content style={{ padding: 24 }}>
-        <Switch>
-          <Route path="/apis">
+      <Layout.Content style={{ marginTop: 64 }}>
+        <Layout.Content style={{ padding: 24 }}>
+          <Switch>
+            <Route path="/apis">
               <Apis />
-          </Route>
-          <Route path="/automation">
+            </Route>
+            <Route path="/automation">
               <Automation />
-          </Route>
-          <Route path="/dashboards">
+            </Route>
+            <Route path="/dashboards">
               <Dashboards />
-          </Route>
-          <Route path="/settings">
+            </Route>
+            <Route path="/settings">
               <Settings />
-          </Route>
-          <Route path="/security">
+            </Route>
+            <Route path="/security">
               <Security />
-          </Route>
-        </Switch>
+            </Route>
+          </Switch>
+        </Layout.Content>
       </Layout.Content>
     </Layout>
   );

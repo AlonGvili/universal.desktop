@@ -11,6 +11,7 @@ import {
     Card,
     Divider,
     Popconfirm,
+    Radio,
     Space,
     Tooltip,
     Typography
@@ -57,7 +58,7 @@ export default function DashboardCard(props: { dashboard: Dashboard }) {
       </BodyLink>
       <Divider style={{ width: "100%" }} type="horizontal" dashed plain />
       <Space style={{ justifyContent: "space-between", width: "100%" }}>
-        <Button.Group style={{ marginLeft: "-4px" }} size="small">
+        <Radio.Group style={{ marginLeft: "-4px" }} size="small" >
           <Popconfirm
             style={{
               fontFamily: "SFProDisplay-Regular",
@@ -97,8 +98,8 @@ export default function DashboardCard(props: { dashboard: Dashboard }) {
               />
             </Tooltip>
           </Popconfirm>
-          <Tooltip title="Info">
             <Link to={`dashboards/${dashboard.id}`}>
+          <Tooltip title="Info">
               <Button
                 icon={
                   <Typography.Text type="secondary" style={{ fontSize: 14 }}>
@@ -107,8 +108,8 @@ export default function DashboardCard(props: { dashboard: Dashboard }) {
                 }
                 type="text"
               />
-            </Link>
           </Tooltip>
+            </Link>
           <Tooltip title="View">
             <Button
               icon={
@@ -119,7 +120,7 @@ export default function DashboardCard(props: { dashboard: Dashboard }) {
               type="text"
             />
           </Tooltip>
-        </Button.Group>
+        </Radio.Group>
         <Button.Group size="small">
           <Button icon={setPowerIconColor(dashboard.status)} type="text" />
         </Button.Group>
