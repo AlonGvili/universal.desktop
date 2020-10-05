@@ -1,14 +1,12 @@
 import React from "react";
-import { useParams } from "react-router-dom";
-import Loader from "components/Loader";
+// import { useParams } from "react-router-dom";
 import { queryCache } from "react-query";
 import { Dashboard } from "types";
-import { from, fromEvent, interval, of } from "rxjs";
-import { switchMap, takeUntil, scan, startWith } from "rxjs/operators";
+import { from, fromEvent } from "rxjs";
+import { switchMap, takeUntil, startWith } from "rxjs/operators";
 import { Button } from "antd";
 
 export default function DashboardPage() {
-  const id = Number.parseInt(useParams<{ id: string }>().id);
   const dashboards: Dashboard[] | undefined = queryCache.getQueryData<Dashboard[]>([
     "dashboards"
   ]);
