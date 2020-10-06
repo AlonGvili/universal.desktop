@@ -18,3 +18,8 @@
   src: url("./fonts/SFProDisplay-Regular.ttf") format("truetype");
   /* Add other formats as you see fit */
 }
+
+html {
+  overflow: hidden;
+}
+
