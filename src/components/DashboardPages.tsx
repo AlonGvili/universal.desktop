@@ -5,7 +5,7 @@ import DashboardLog from "./DashboardLog";
 import { Dashboard } from "types";
 import { Button } from "antd/es";
 import useContentProvider from "context/content/Provider";
-import { PicCenterOutlined, PicLeftOutlined, PicRightOutlined } from "@ant-design/icons";
+import { PicCenterOutlined, PicRightOutlined } from "@ant-design/icons";
 
 export default function DashboardPages(props: {
   dashboard: Dashboard | undefined;

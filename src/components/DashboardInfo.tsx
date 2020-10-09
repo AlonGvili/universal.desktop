@@ -4,10 +4,7 @@ import { capitalize, setPowerIconColor } from "utilities/utils";
 import { Dashboard } from "types";
 import { Button } from "antd/es";
 import {
-  LeftOutlined,
   LeftCircleFilled,
-  LeftCircleOutlined,
-  ArrowLeftOutlined,
 } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 
