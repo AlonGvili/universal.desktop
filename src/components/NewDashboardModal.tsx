@@ -55,7 +55,7 @@ export default function NewDashboardModal(props: {
   const [optionsForm] = Form.useForm();
   const [addDashboard, { isLoading }] = useNewDashboard();
   const frameworks = useFrameworks();
-  const latestFramework = useNewestFramework();
+  const latestFramework = useNewestFramework(); 
   const powershell = useEnvironments();
   const roles = useRoles();
 

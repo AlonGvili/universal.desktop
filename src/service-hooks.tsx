@@ -42,14 +42,21 @@ export async function fetchDashboard(id: number): Promise<Dashboard> {
 }
 
 export async function fetchDashboardLog(id: number): Promise<DashboardLog> {
-  return await axios
-    .get(`${url}/dashboard/${id}/log`)
-    .then((res: AxiosResponse<DashboardLog>) => res.data);
+  const logs = await axios
+    .get(`https://raw.githubusercontent.com/AlonGvili/psu/master/logs.json`)
+    .then((res) => res.data);
+
+  queryCache.setQueryData(
+    ["dashboard", { dashboardId: id, type: "log" }],
+    logs.Logs
+  );
+
+  return logs.Logs;
 }
 
 export async function fetchDashboards(): Promise<Dashboard[]> {
   const dashboards = await axios
-    .get(`https://raw.githubusercontent.com/AlonGvili/psu/master/db.json`)
+    .get(`https://raw.githubusercontent.com/AlonGvili/psu/master/dashboards.json`)
     .then((res) => res.data);
 
   dashboards.Dashboards.forEach((dashboard: Dashboard) => {
@@ -340,7 +347,7 @@ export function useComponents() {
 // Get all frameworks
 export async function fetchFrameworks(): Promise<DashboardFramework[]> {
   const frameworks = await axios
-    .get(`https://raw.githubusercontent.com/AlonGvili/psu/master/db.json`)
+    .get(`https://raw.githubusercontent.com/AlonGvili/psu/master/frameworks.json`)
     .then((res) => res.data);
 
   return frameworks.Frameworks;
@@ -353,7 +360,7 @@ export function useFrameworks() {
 // Get the newest framework.
 export async function fetchNewestFramework() {
   const newestFramework = await axios
-    .get(`https://raw.githubusercontent.com/AlonGvili/psu/master/db.json`)
+    .get(`https://raw.githubusercontent.com/AlonGvili/psu/master/newestframework.json`)
     .then((res) => res.data);
 
   return newestFramework.NewestFramework;
@@ -820,7 +827,7 @@ export function useNewRateLimit() {
 
 export async function fetchRoles(): Promise<Role[]> {
   const roles = await axios
-    .get(`https://raw.githubusercontent.com/AlonGvili/psu/master/db.json`)
+    .get(`https://raw.githubusercontent.com/AlonGvili/psu/master/roles.json`)
     .then((res) => res.data);
 
   roles.Roles.forEach((role: Role) => {

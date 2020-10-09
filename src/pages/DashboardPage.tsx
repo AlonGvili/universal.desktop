@@ -1,107 +1,68 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { lazy } from "react";
 import { useParams } from "react-router-dom";
 import { queryCache } from "react-query";
 import { Dashboard } from "types";
-import Loader from "components/Loader";
-import { Card, Col, Row, Space, Typography } from "antd";
-import { capitalize } from "utilities/utils";
-import Editor from "components/Editor";
-import { editor } from "monaco-editor";
-import { useSize } from "ahooks";
-import DashboardSettings from "components/DashboardSettings";
+import { Col, Row } from "antd";
+import useContentProvider from "../context/content/Provider";
+const Loader = lazy(
+  () => import(/* webpackChunkName: 'Loader' */ "components/Loader")
+);
+const DashboardInfo = lazy(
+  () =>
+    import(/* webpackChunkName: 'DashboardInfo' */ "components/DashboardInfo")
+);
+const DashboardEditor = lazy(
+  () =>
+    import(
+      /* webpackChunkName: 'DashboardEditor' */ "components/DashboardEditor"
+    )
+);
+const DashboardPages = lazy(
+  () =>
+    import(/* webpackChunkName: 'DashboardPages' */ "components/DashboardPages")
+);
 
 export default function DashboardPage() {
   const id = Number.parseInt(useParams<{ id: string }>().id);
-  const ref = useRef<HTMLDivElement>(null);
-  const size = useSize(ref);
-  const editorRef = useRef<editor.IStandaloneCodeEditor>();
-  const [currentTab, setCurrentTab] = useState("settings");
-
+  // const refRow = useRef<HTMLDivElement>({} as HTMLDivElement);
   const dashboard: Dashboard | undefined = queryCache.getQueryData<Dashboard>([
     "dashboard",
     { dashboardId: id },
   ]);
 
-  useEffect(() => editorRef.current?.layout(), [size.width]);
-
-  const tabs = [
-    {
-      key: "settings",
-      tab: "Settings",
-    },
-    {
-      key: "log",
-      tab: "Log"
-    },
-  ];
-
-  const tabsPanels = {
-    settings: <DashboardSettings dashboard={dashboard} />,
-  };
+  const [{left,right}] = useContentProvider()
 
   return (
     <Loader tip={`Loading Dashboard ${dashboard?.id}...`} spinning>
-      <div ref={ref} style={{ height: "100%" }}>
+      {/* Top page main dashboard info and actions row */}
+      <Row gutter={[24, 24]}>
+        {/* Dashboard main info and actions buttons */}
+        <Col span={24}>
+          <DashboardInfo dashboard={dashboard} />
+        </Col>
+      </Row>
+
+  
+        {/* Rest of the page main row with 2 columns  */}
         <Row gutter={[24, 24]}>
-          <Col span={24}>
-            <Card bordered={false}>
-              <Typography
-                style={{
-                  fontSize: 20,
-                  fontWeight: 600,
-                  fontFamily: "SFProDisplay-Semibold",
-                }}
-              >
-                <Space>
-                  {capitalize(dashboard?.name)}
-                  <Typography.Text
-                    style={{ fontFamily: "SFProDisplay-Regular" }}
-                    type="secondary"
-                  >{`#${dashboard?.id}`}</Typography.Text>
-                </Space>
-              </Typography>
-            </Card>
+          {/* Left side code editor */}
+
+          <Col span={left.colSpan} style={{ height: "100%" }}>
+            {/* <Resizable grid={[12, 1]} bounds="parent"> */}
+            <DashboardEditor
+              dashboard={dashboard}
+            />
+            {/* </Resizable> */}
+          </Col>
+          {/* Right side dashboard settings, log, components, console, output, endpoints and sessions */}
+          <Col span={right.colSpan} style={{ minHeight: "100%" }}>
+            {/* <Resizable grid={[12, 1]} > */}
+            <DashboardPages
+              dashboard={dashboard}
+            />
+            {/* </Resizable> */}
           </Col>
         </Row>
-        <Row gutter={[24, 24]}>
-          <Col span={15} style={{ height: "100%" }}>
-            <Card bordered={false} bodyStyle={{ padding: 0 }}>
-              <Editor
-                data={dashboard || ({} as Dashboard)}
-                editorProps={{
-                  theme: "dark",
-                  value: dashboard?.content,
-                  options: {
-                    wordWrap: "bounded",
-                    wrappingIndent: "indent",
-                    minimap: {
-                      enabled: false,
-                    },
-                  },
-                  height: "90vh",
-                }}
-                ref={editorRef}
-              />
-            </Card>
-          </Col>
-          <Col span={9} style={{ minHeight: "100%" }}>
-            
-            <Card
-              bordered={false}
-              headStyle={{ border: "none" }}
-              style={{ height: "100%" }}
-              tabList={tabs}
-              tabProps={{
-                type: "line",
-                tabBarStyle: { borderColor: "none" },
-              }}
-              onTabChange={(key) => setCurrentTab(key)}
-            >
-              {tabsPanels[currentTab]}
-            </Card>
-          </Col>
-        </Row>
-      </div>
     </Loader>
   );
 }

@@ -1,35 +1,48 @@
 import "../App.less";
-import React from "react";
+import React, { lazy } from "react";
 import Layout from "antd/es/layout";
 import { Route, Switch } from "react-router-dom";
+import Loader from "components/Loader";
 
-import Apis from "routes/Apis";
-import Dashboards from "routes/Dashboards";
-import Automation from "routes/Automation";
-import Settings from "routes/Settings";
-import Security from "routes/Security";
+const Apis = lazy(
+  () => import(/* webpackChunkName: 'Apis' */ "routes/Apis")
+);
+const Dashboards = lazy(
+  () => import(/* webpackChunkName: 'Dashboards' */ "routes/Dashboards")
+);
+const Automation = lazy(
+  () => import(/* webpackChunkName: 'Automation' */ "routes/Automation")
+);
+const Settings = lazy(
+  () => import(/* webpackChunkName: 'Settings' */ "routes/Settings")
+);
+const Security = lazy(
+  () => import(/* webpackChunkName: 'Security' */ "routes/Security")
+);
 
 const PrimaryLayout = () => {
   return (
     <Layout.Content style={{ height: "100vh" }}>
       <Layout.Content style={{ padding: 24, marginTop: 64, marginBottom: 64 }}>
-        <Switch>
-          <Route path="/apis">
-            <Apis />
-          </Route>
-          <Route path="/automation">
-            <Automation />
-          </Route>
-          <Route path="/dashboards">
-            <Dashboards />
-          </Route>
-          <Route path="/settings">
-            <Settings />
-          </Route>
-          <Route path="/security">
-            <Security />
-          </Route>
-        </Switch>
+        <Loader>
+          <Switch>
+            <Route path="/apis">
+              <Apis />
+            </Route>
+            <Route path="/automation">
+              <Automation />
+            </Route>
+            <Route path="/dashboards">
+              <Dashboards />
+            </Route>
+            <Route path="/settings">
+              <Settings />
+            </Route>
+            <Route path="/security">
+              <Security />
+            </Route>
+          </Switch>
+        </Loader>
       </Layout.Content>
     </Layout.Content>
   );

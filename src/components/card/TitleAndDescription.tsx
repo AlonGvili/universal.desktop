@@ -27,8 +27,6 @@ export default function CardHeader(props: {
           fontWeight: 400,
           lineHeight: "22px",
           fontFamily: "SFProDisplay-Regular",
-          //   display: "flex",
-          //   textAlign: "center",
         }}
       >
         {props.description === undefined ? <br /> : props.description}

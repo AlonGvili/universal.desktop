@@ -29,6 +29,8 @@
     "src"
   ],
   "exclude": [
-    "src/context"
+    "src/context/app",
+    "src/context/role",
+    "src/context/auth",
   ]
 }

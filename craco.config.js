@@ -24,6 +24,7 @@ module.exports = {
                 "**/editor/editor.main.nls.zh-cn.js",
                 "**/editor/editor.main.nls.zh-tw.js",
                 "**/basic-languages/**",
+                "**/language/**"
               ],
             },
           },

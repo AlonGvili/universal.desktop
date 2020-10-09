@@ -94,6 +94,7 @@ export default function DashboardSettings(props: {
   return (
     <Form
       {...formItemLayout}
+      style={{ paddingTop: 24 }}
       form={form}
       labelAlign="left"
       requiredMark={false}
