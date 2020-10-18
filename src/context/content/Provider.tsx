@@ -50,7 +50,7 @@ export function contentReducer(
   }
 }
 
-export function ContentProvider({ children }) {
+export default function ContentProvider({ children }) {
   const value = useReducer(contentReducer, initState);
   return (
     <ContentContext.Provider value={value}>{children}</ContentContext.Provider>

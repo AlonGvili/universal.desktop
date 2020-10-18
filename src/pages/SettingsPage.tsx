@@ -1,5 +1,5 @@
 import React, { lazy } from "react";
-import { Redirect, Route, Switch, useParams } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import Loader from "components/Loader";
 const EnvironmentPage = lazy(() => import("pages/EnvironmentPage"));
 const LicensePage = lazy(() => import("pages/LicensePage"));

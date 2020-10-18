@@ -8,7 +8,7 @@ export default function Settings() {
   return (
     <Switch>
       <Loader>
-        <Route path="/settings" component={SettingsOverview} />
+        <Route exact path="/settings" component={SettingsOverview} />
         <Route path="/settings/:page" component={SettingsPage} />
       </Loader>
     </Switch>

@@ -5,7 +5,7 @@ import { editor } from "monaco-editor";
 import { useSize } from "ahooks";
 import { Dashboard } from "types";
 import { Button, message } from "antd/es";
-import useContentProvider from "context/content/Provider";
+import useContentProvider from "context/content/Hooks";
 import {
   PicCenterOutlined,
   PicLeftOutlined,
