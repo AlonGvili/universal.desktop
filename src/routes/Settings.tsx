@@ -15,4 +15,3 @@ export default function Settings() {
   );
 }
 
-Settings.displayName = "Settings";

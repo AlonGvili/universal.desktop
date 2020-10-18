@@ -69,6 +69,9 @@ export default function SideBar() {
           <Menu.Item key="licenses">
             <Link to="/settings/licenses">Licenses</Link>
           </Menu.Item>
+          <Menu.Item key="security">
+            <Link to="/security">Security</Link>
+          </Menu.Item>
         </Menu.SubMenu>
       </Menu>
     </Layout.Sider>
