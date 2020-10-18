@@ -1,41 +1,10 @@
-import React, { useReducer, createContext, useContext } from "react";
-
-declare const ActionTypes: ["EXPAND_LEFT", "EXPAND_RIGHT", "RESET"];
-export declare type ActionType = typeof ActionTypes[number];
-
-type ContentReducerState = {
-  left: {
-    isExpanded: boolean;
-    colSpan: number;
-  };
-  right: {
-    isExpanded: boolean;
-    colSpan: number;
-  };
-};
-
-type ContextTypeProps = [
+import React, { useReducer } from "react";
+import {
+  ActionType,
   ContentReducerState,
-  React.Dispatch<{
-    type: ActionType;
-  }>
-];
-
-const initState = {
-  left: {
-    isExpanded: false,
-    colSpan: 15,
-  },
-  right: {
-    isExpanded: false,
-    colSpan: 9,
-  },
-};
-
-const ContentContext = createContext<ContextTypeProps>([
   initState,
-  (value) => value,
-]);
+  ContentContext,
+} from "./Context";
 
 export function contentReducer(
   state: ContentReducerState,
@@ -86,8 +55,4 @@ export function ContentProvider({ children }) {
   return (
     <ContentContext.Provider value={value}>{children}</ContentContext.Provider>
   );
-}
-
-export default function useContentProvider() {
-  return useContext(ContentContext);
 }
