@@ -39,6 +39,14 @@ const { useBreakpoint } = Grid;
 
 export default function DashboardsOverview() {
   const { data } = useDashboards();
+  const { xs } = useBreakpoint();
+
+  const [layout, setLayout] = useState("grid_layout");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const [searchForm] = Form.useForm();
+  const [layoutForm] = Form.useForm();
+
   const [filterValue, setFilterValue] = useState<Dashboard[] | undefined>(
     () => {
       return data?.map((dashboard) => {
@@ -50,19 +58,11 @@ export default function DashboardsOverview() {
     }
   );
 
-  const { xs } = useBreakpoint();
-
-  const [layout, setLayout] = useState("grid_layout");
-  const [isOpen, setIsOpen] = useState(false);
-
-  const [searchForm] = Form.useForm();
-  const [layoutForm] = Form.useForm();
-
   function onSearch(value: string) {
     if (value === undefined || value === "") {
       setFilterValue(data);
     } else {
-      let results: Dashboard[] = appSearch(
+      let results = appSearch(
         "id",
         [
           "name",
@@ -89,10 +89,8 @@ export default function DashboardsOverview() {
     <>
       <Row gutter={[16, 16]}>
         <Col flex={1}>
-          <Card
-            bordered={false}
-          >
-            <Row gutter={xs ? [16,16] : 16}>
+          <Card bordered={false}>
+            <Row gutter={xs ? [16, 16] : 16}>
               <Col flex={1}>
                 <Form
                   colon={false}
@@ -137,7 +135,10 @@ export default function DashboardsOverview() {
                   <Form.Item>
                     <Button
                       type="primary"
-                      style={{ fontFamily: "SFProDisplay-Regular", marginBottom: xs ? 16 : undefined  }}
+                      style={{
+                        fontFamily: "SFProDisplay-Regular",
+                        marginBottom: xs ? 16 : undefined,
+                      }}
                       onClick={() => setIsOpen(true)}
                     >
                       Create New Dashboard
@@ -169,8 +170,6 @@ export default function DashboardsOverview() {
                   </Form.Item>
                 </Form>
               </Col>
-              {/* </Space> */}
-              {/* </Space> */}
             </Row>
           </Card>
         </Col>

@@ -12,4 +12,3 @@ export default function ApiPage() {
   );
 }
 
-ApiPage.displayName = "ApiPage";

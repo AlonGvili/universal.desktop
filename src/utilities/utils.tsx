@@ -12,10 +12,9 @@ import {
   UnlockFilled,
 } from "@ant-design/icons";
 import { Badge, Tag, Tooltip } from "antd";
-// import Axios from "axios";
 import * as JsSearch from "js-search";
 import React from "react";
-// import { Observable } from "rxjs";
+
 export declare const MethodName: ["GET", "POST", "DELETE", "PUT"];
 export declare type MethodType = typeof MethodName[number];
 
@@ -72,16 +71,6 @@ export function setPowerIconColor(status: number | undefined) {
           <PoweroffOutlined
             style={{
               color: presetPrimaryColors["cyan"],
-            }}
-          />
-        </Tooltip>
-      );
-    case 4:
-      return (
-        <Tooltip title="Dashboard Is Waiting For Feedback" color="gold">
-          <PoweroffOutlined
-            style={{
-              color: presetPrimaryColors["gold"],
             }}
           />
         </Tooltip>
@@ -205,10 +194,10 @@ export function capitalize(
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
-export function appSearch(
+export function appSearch<T>(
   key: string | number,
-  fields: any,
-  data: object | object[] | undefined,
+  fields: (string | string[])[],
+  data: T | T[] | undefined,
   term: string
 ) {
   if (data === undefined) return;
@@ -217,7 +206,7 @@ export function appSearch(
   const search = new JsSearch.Search(uniqeKey);
   search.searchIndex = new JsSearch.UnorderedSearchIndex();
 
-  let fieldset: string[] | [string[]] = [];
+  let fieldset: (string | string[])[] = [];
   if (!Array.isArray(fields)) {
     fieldset.push(fields);
   }

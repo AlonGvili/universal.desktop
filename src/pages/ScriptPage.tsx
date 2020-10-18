@@ -11,4 +11,3 @@ export default function ScriptPage() {
   );
 }
 
-ScriptPage.displayName = "ScriptPage";

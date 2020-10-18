@@ -24,5 +24,3 @@ export default function SecurityOverview() {
     </Loader>
   );
 }
-
-SecurityOverview.displayName = "SecurityOverview";

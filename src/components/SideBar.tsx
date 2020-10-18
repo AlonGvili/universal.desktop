@@ -5,6 +5,7 @@ import {
   ApiOutlined,
   DashboardOutlined,
   CodeOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
 
 export default function SideBar() {
@@ -56,6 +57,17 @@ export default function SideBar() {
           </Menu.Item>
           <Menu.Item key="public_folders">
             <Link to="/folders">Folders</Link>
+          </Menu.Item>
+        </Menu.SubMenu>
+        <Menu.SubMenu icon={<SettingOutlined />} title="Settings">
+          <Menu.Item key="settings">
+            <Link to="/settings">Overview</Link>
+          </Menu.Item>
+          <Menu.Item key="environments">
+            <Link to="/settings/environments">Environments</Link>
+          </Menu.Item>
+          <Menu.Item key="licenses">
+            <Link to="/settings/licenses">Licenses</Link>
           </Menu.Item>
         </Menu.SubMenu>
       </Menu>
