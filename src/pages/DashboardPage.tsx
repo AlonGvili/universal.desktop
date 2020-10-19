@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { Col, Row } from "antd";
 import { useDashboard } from "service-hooks";
 import useContentProvider from "../context/content/Hooks";
+import ComponentsDrawer from "components/ComponentDrawer"
 
 const Loader = lazy(
   () => import(/* webpackChunkName: 'Loader' */ "components/Loader")
@@ -44,6 +45,7 @@ export default function DashboardPage() {
           <DashboardPages dashboard={dashboard} />
         </Col>
       </Row>
+      <ComponentsDrawer />
     </Loader>
   );
 }

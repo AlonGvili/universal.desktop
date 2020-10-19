@@ -78,21 +78,21 @@ export function useDashboards() {
 
 export function useUpdateDashboard() {
   return useMutation(
-    (dashboard: Dashboard) =>
+    (dashboard: Partial<Dashboard> | undefined) =>
       axios
-        .put(`${url}/dashboard/${dashboard.id}`, dashboard)
+        .put(`${url}/dashboard/${dashboard?.id}`, dashboard)
         .then((res: AxiosResponse<Dashboard>) => res.data),
     {
       onMutate: (dashboard) => {
-        queryCache.cancelQueries(["dashboard", { dashboardId: dashboard.id }]);
+        queryCache.cancelQueries(["dashboard", { dashboardId: dashboard?.id }]);
 
         const oldDashboard: Dashboard | undefined = queryCache.getQueryData<
           Dashboard
-        >(["dashboard", { dashboardId: dashboard.id }]);
+        >(["dashboard", { dashboardId: dashboard?.id }]);
 
         return () =>
           queryCache.setQueryData(
-            ["dashboard", { dashboardId: dashboard.id }],
+            ["dashboard", { dashboardId: dashboard?.id }],
             oldDashboard
           );
       },
@@ -105,7 +105,7 @@ export function useUpdateDashboard() {
 
       onSuccess: (data, dashboard) => {
         queryCache.setQueryData(
-          ["dashboard", { dashboardId: dashboard.id }],
+          ["dashboard", { dashboardId: dashboard?.id }],
           (old: Dashboard | undefined) => ({
             ...old,
             ...data,
@@ -113,7 +113,7 @@ export function useUpdateDashboard() {
         );
         queryCache.invalidateQueries([
           "dashboard",
-          { dashboardId: dashboard.id },
+          { dashboardId: dashboard?.id },
         ]);
       },
     }
@@ -331,9 +331,11 @@ export function useTotalMemory() {
 
 // Get all components
 export async function fetchComponents(): Promise<DashboardComponent[]> {
-  return await axios
-    .get(`${url}/dashboardcomponent`)
-    .then((res: AxiosResponse<DashboardComponent[]>) => res.data);
+  const components: { Components: DashboardComponent[] } = await axios
+    .get(`https://raw.githubusercontent.com/AlonGvili/psu/master/components.json`)
+    .then((res) => res.data);
+
+  return components.Components;
 }
 
 export function useComponents() {

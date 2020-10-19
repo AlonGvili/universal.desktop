@@ -3,16 +3,16 @@ import { Card, Typography, Space } from "antd";
 import { capitalize, setPowerIconColor } from "utilities/utils";
 import { Dashboard } from "types";
 import { Button } from "antd/es";
-import {
-  LeftCircleFilled,
-} from "@ant-design/icons";
+import { AppstoreAddOutlined, LeftCircleFilled } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
+import useDrawerProvider from "context/drawer/Hooks";
 
 export default function DashboardInfo(props: {
   dashboard: Dashboard | undefined;
 }) {
   const { dashboard } = props;
   const history = useHistory();
+  const [, dispatch] = useDrawerProvider();
   return (
     <Card bordered={false}>
       <Typography
@@ -38,6 +38,11 @@ export default function DashboardInfo(props: {
           >{`#${dashboard?.id}`}</Typography.Text>
         </Space>
         <Button.Group>
+          <Button
+            icon={<AppstoreAddOutlined />}
+            type="text"
+            onClick={() => dispatch({ type: "OPEN" })}
+          />
           <Button icon={setPowerIconColor(dashboard?.status)} type="text" />
         </Button.Group>
       </Typography>

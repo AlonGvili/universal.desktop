@@ -13,7 +13,7 @@ import {
 } from "@ant-design/icons";
 import { Badge, Tag, Tooltip } from "antd";
 import * as JsSearch from "js-search";
-import React from "react";
+import React, { useState } from "react";
 
 export declare const MethodName: ["GET", "POST", "DELETE", "PUT"];
 export declare type MethodType = typeof MethodName[number];
@@ -218,4 +218,21 @@ export function appSearch<T>(
   search.addDocuments(Array.isArray(data) ? data : [data]);
 
   return search.search(term);
+}
+
+
+
+export function useSearch<T>(key: string, fields: (string | string[])[], data: T[] | undefined) {
+  const [values, setFilterValue] = useState<T[] | undefined>(data);
+
+  function search(value: string) {
+    if (value === undefined || value === "") {
+      setFilterValue(data);
+    } else {
+      let results = appSearch(key, fields, data, value);
+      setFilterValue(results);
+    }
+  }
+
+  return { values, search };
 }
