@@ -2,98 +2,102 @@ import React, { useState } from "react";
 import { Form, Input, Select, Tooltip, Switch, Button } from "antd";
 import { ValidateStatus } from "antd/lib/form/FormItem";
 import { InfoCircleOutlined } from "@ant-design/icons";
-import { useEnvironments, useFrameworks, useRoles } from "service-hooks";
+import {
+  useDashboard,
+  useEnvironments,
+  useFrameworks,
+  useRoles,
+} from "service-hooks";
 import { queryCache } from "react-query";
 import { Environment, DashboardFramework, Role, Dashboard } from "types";
+import { useParams } from "react-router-dom";
 
-const formItemLayout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 18 },
-};
-
-export default function DashboardSettings(props: {
-  dashboard: Dashboard | undefined;
-}) {
-  const { dashboard } = props;
-  const [nameValidateStatus, setNameValidateStatus] = useState<
-    ValidateStatus
-  >();
-  const [filePathValidateStatus, setFilePathValidateStatus] = useState<
-    ValidateStatus
-  >();
-  const [baseUrlValidateStatus, setBaseUrlValidateStatus] = useState<
-    ValidateStatus
-  >();
+export default function DashboardSettings() {
+  const id = Number.parseInt(useParams<{ id: string }>().id);
+  const { data: dashboard } = useDashboard(id);
+  const { data: roles } = useRoles();
+  const { data: frameworks } = useFrameworks();
+  const { data: powershell } = useEnvironments();
+  const [nameValidation, setNameValidation] = useState<ValidateStatus>();
+  const [pathValidation, setPathValidation] = useState<ValidateStatus>();
+  const [baseUrlValidation, setBaseUrlValidation] = useState<ValidateStatus>();
 
   const [form] = Form.useForm();
-  const roles = useRoles();
-  const frameworks = useFrameworks();
-  const powershell = useEnvironments();
 
-  async function validateName(name) {
+  async function validateName(name: Dashboard["name"]) {
+    if (dashboard?.name === name) {
+      return Promise.resolve();
+    }
     if (null === name || name === "" || name === undefined) {
-      setNameValidateStatus("error");
+      setNameValidation("error");
       return Promise.reject("Dashboard name can't be empty");
     } else {
-      setNameValidateStatus("validating");
+      setNameValidation("validating");
       if (
         queryCache
           .getQueryData<Dashboard[]>("dashboards")
           ?.find((dashboard: Dashboard) => dashboard.name === name)
       ) {
-        setNameValidateStatus("error");
+        setNameValidation("error");
         return Promise.reject("Dashboard with that name already exists!");
       } else {
-        setNameValidateStatus("success");
+        setNameValidation("success");
         return Promise.resolve();
       }
     }
   }
 
-  async function validateBaseUrl(baseUrl) {
+  async function validateBaseUrl(baseUrl: Dashboard["baseUrl"]) {
+    if (dashboard?.baseUrl === baseUrl) {
+      return Promise.resolve();
+    }
     if (null === baseUrl || baseUrl === "" || baseUrl === undefined) {
-      setBaseUrlValidateStatus("error");
+      setBaseUrlValidation("error");
       return Promise.reject("Dashboard url can't be empty!");
     } else if (!baseUrl.startsWith("/")) {
-      setBaseUrlValidateStatus("error");
+      setBaseUrlValidation("error");
       return Promise.reject("Dashboard url need to start with /");
     } else {
-      setBaseUrlValidateStatus("validating");
+      setBaseUrlValidation("validating");
       if (
         queryCache
           .getQueryData<Dashboard[]>("dashboards")
           ?.find((dashboard: Dashboard) => dashboard.baseUrl === baseUrl)
       ) {
-        setBaseUrlValidateStatus("error");
+        setBaseUrlValidation("error");
         return Promise.reject("Dashboard with that url already exists!");
       } else {
-        setBaseUrlValidateStatus("success");
+        setBaseUrlValidation("success");
         return Promise.resolve();
       }
     }
   }
 
-  async function validateFilePath(filePath) {
+  async function validateFilePath(filePath: Dashboard["filePath"]) {
+    if (dashboard?.filePath === filePath) {
+      return Promise.resolve();
+    }
     if (null === filePath || filePath === "" || filePath === undefined) {
-      setFilePathValidateStatus("error");
+      setPathValidation("error");
       return Promise.reject("File path can't be empty!");
     }
-    setFilePathValidateStatus("validating");
+    setPathValidation("validating");
     if (
       queryCache
         .getQueryData<Dashboard[]>("dashboards")
         ?.find((dashboard: Dashboard) => dashboard.filePath === filePath)
     ) {
-      setFilePathValidateStatus("error");
+      setPathValidation("error");
       return Promise.reject("Dashboard with that file already exists!");
     } else {
-      setFilePathValidateStatus("success");
+      setPathValidation("success");
       return Promise.resolve();
     }
   }
   return (
     <Form
-      {...formItemLayout}
+      labelCol={{ span: 6 }}
+      wrapperCol={{ span: 18 }}
       style={{ paddingTop: 24 }}
       form={form}
       labelAlign="left"
@@ -113,7 +117,7 @@ export default function DashboardSettings(props: {
         name="name"
         label="Name"
         hasFeedback
-        validateStatus={nameValidateStatus}
+        validateStatus={nameValidation}
         required
         rules={[
           {
@@ -133,7 +137,7 @@ export default function DashboardSettings(props: {
         name="baseUrl"
         label="Url"
         hasFeedback
-        validateStatus={baseUrlValidateStatus}
+        validateStatus={baseUrlValidation}
         rules={[
           {
             validator: async (_, value) => validateBaseUrl(value),
@@ -153,7 +157,7 @@ export default function DashboardSettings(props: {
         name="filePath"
         label="Path"
         hasFeedback
-        validateStatus={filePathValidateStatus}
+        validateStatus={pathValidation}
         required
         rules={[
           {
@@ -172,7 +176,7 @@ export default function DashboardSettings(props: {
 
       <Form.Item name="environment" label="Environment">
         <Select defaultActiveFirstOption>
-          {powershell.data?.map((psVersion: Environment) => (
+          {powershell?.map((psVersion: Environment) => (
             <Select.Option key={psVersion.id} value={psVersion.name}>
               {psVersion.name}
             </Select.Option>
@@ -181,7 +185,7 @@ export default function DashboardSettings(props: {
       </Form.Item>
       <Form.Item name="dashboardFramework" label="Framework">
         <Select>
-          {frameworks.data?.map((framework: DashboardFramework) => (
+          {frameworks?.map((framework: DashboardFramework) => (
             <Select.Option
               key={framework.id}
               value={framework.id}
@@ -206,7 +210,7 @@ export default function DashboardSettings(props: {
           return getFieldValue("authenticated") === true ? (
             <Form.Item name="role" label="Role">
               <Select defaultActiveFirstOption>
-                {roles.data?.map((role: Role) => (
+                {roles?.map((role: Role) => (
                   <Select.Option key={role.name} value={role.name}>
                     {role.name}
                   </Select.Option>
@@ -224,7 +228,9 @@ export default function DashboardSettings(props: {
         />
       </Form.Item>
       <Form.Item>
-          <Button type="primary" htmlType="submit">Save Settings</Button>
+        <Button type="primary" htmlType="submit">
+          Save Settings
+        </Button>
       </Form.Item>
     </Form>
   );

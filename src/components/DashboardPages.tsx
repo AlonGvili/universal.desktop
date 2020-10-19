@@ -20,15 +20,31 @@ export default function DashboardPages(props: {
       tab: "Settings",
     },
     {
-      key: "log",
-      tab: "Log",
+      key: "endpoints",
+      tab: "Endpoints",
+    },
+    {
+      key: "sessions",
+      tab: "Sessions",
+    },
+    {
+      key: "output",
+      tab: "Output",
+    },
+    {
+      key: "components",
+      tab: "Components",
     },
   ];
 
   const tabsPanels = {
-    settings: <DashboardSettings dashboard={dashboard} />,
-    log: <DashboardLog />,
+    settings: <DashboardSettings />,
+    endpoints: "endpoints",
+    sessions: "sessions",
+    output: "output",
+    components: "components",
   };
+
   return (
     <Card
       bordered={false}

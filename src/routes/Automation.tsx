@@ -24,4 +24,3 @@ export default function Automation() {
   );
 }
 
-Automation.displayName = "Automation";

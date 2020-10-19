@@ -2,8 +2,10 @@ import React from "react";
 import { Col, Layout, Menu, Row } from "antd";
 import { LogoutOutlined } from "@ant-design/icons";
 import Avatar from "antd/lib/avatar/avatar";
+import { useHistory } from "react-router-dom";
 
 export default function AppBar() {
+  const history = useHistory()
   return (
     <Layout.Header
       style={{
@@ -16,7 +18,7 @@ export default function AppBar() {
     >
       <Row align="stretch" justify="end" style={{ width: "inherit" }}>
         <Col>
-          <Menu mode="horizontal" theme="dark">
+          <Menu mode="horizontal" theme="dark" onClick={() => history.push("/login")}>
             <Menu.SubMenu
               title="Admin"
               icon={
@@ -28,7 +30,7 @@ export default function AppBar() {
                 />
               }
             >
-              <Menu.Item key="signout" icon={<LogoutOutlined />}>
+              <Menu.Item key="signout" icon={<LogoutOutlined />} >
                 Signout
               </Menu.Item>
             </Menu.SubMenu>

@@ -8,7 +8,6 @@ import { useParams } from "react-router";
 import {
   CheckCircleOutlined,
   MinusCircleOutlined,
-  PlusCircleOutlined,
 } from "@ant-design/icons";
 import { Table, Tag, Drawer, Button, Row, Col, Card, Form, Input } from "antd";
 import React from "react";
@@ -17,7 +16,6 @@ import { DashboardComponent } from "../types";
 import ComponentsInfo from "./ComponentsInfo";
 import useDrawerProvider from "../context/drawer/Hooks";
 import { useSearch } from "../utilities/utils";
-import { queryCache } from "react-query";
 import { Space, Typography } from "antd/es";
 
 export default function ComponentsDrawer() {
