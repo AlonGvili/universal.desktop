@@ -1,14 +1,8 @@
+/* eslint-disable array-callback-return */
 import { useState } from "react";
-import {
-  useDashboard,
-  useComponents,
-  useUpdateDashboard,
-} from "../service-hooks";
+import { useDashboard, useUpdateDashboard } from "../service-hooks";
 import { useParams } from "react-router";
-import {
-  CheckCircleOutlined,
-  MinusCircleOutlined,
-} from "@ant-design/icons";
+import { CheckCircleOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { Table, Tag, Drawer, Button, Row, Col, Card, Form, Input } from "antd";
 import React from "react";
 import type { ColumnProps } from "antd/es/table";
@@ -23,7 +17,7 @@ export default function ComponentsDrawer() {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const id = Number.parseInt(useParams<{ id: string }>().id);
   const dashboard = useDashboard(id);
-  const data = queryCache.getQueryData<DashboardComponent[]>("components")
+  const data = queryCache.getQueryData<DashboardComponent[]>("components");
   const { values, search } = useSearch<DashboardComponent>(
     "id",
     ["name", "version"],
@@ -91,7 +85,7 @@ export default function ComponentsDrawer() {
       ) {
         setSelectedComponents(selectedRows);
       } else {
-        selectedRows.map((row) => {
+        selectedRows.map((row: DashboardComponent) => {
           if (
             dashboard.data?.dashboardComponents?.some(
               (install) => install.id !== row.id
@@ -144,17 +138,17 @@ export default function ComponentsDrawer() {
                         form={searchForm}
                       >
                         <Form.Item name="search">
-                            <Input
-                              placeholder="Search for a components"
-                              bordered={false}
-                              style={{
-                                paddingLeft: 0,
-                                fontFamily: "SFProDisplay-Regular",
-                                fontSize: "inherit",
-                              }}
-                              allowClear
-                              onChange={(event) => search(event.target.value)}
-                            />
+                          <Input
+                            placeholder="Search for a components"
+                            bordered={false}
+                            style={{
+                              paddingLeft: 0,
+                              fontFamily: "SFProDisplay-Regular",
+                              fontSize: "inherit",
+                            }}
+                            allowClear
+                            onChange={(event) => search(event.target.value)}
+                          />
                         </Form.Item>
                       </Form>
                     </Typography.Text>

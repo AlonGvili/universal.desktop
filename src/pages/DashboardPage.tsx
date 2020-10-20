@@ -4,8 +4,6 @@ import { Col, Row } from "antd";
 import { useDashboard } from "service-hooks";
 import useContentProvider from "../context/content/Hooks";
 import ComponentsDrawer from "components/ComponentDrawer";
-import { queryCache } from "react-query";
-import { Dashboard } from "types";
 
 const Loader = lazy(
   () => import(/* webpackChunkName: 'Loader' */ "components/Loader")
