@@ -1,7 +1,6 @@
 import "../App.less";
 import React, { lazy } from "react";
 import Layout from "antd/es/layout";
-import { Route, Switch } from "react-router-dom";
 import Loader from "components/Loader";
 
 const Login = lazy(
