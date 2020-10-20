@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Card } from "antd";
 import DashboardSettings from "./DashboardSettings";
+import DashboardComponents from "./DashboardComponents";
 import { Dashboard } from "types";
 import { Button } from "antd/es";
 import useContentProvider from "context/content/Hooks";
@@ -40,14 +41,14 @@ export default function DashboardPages(props: {
     endpoints: "endpoints",
     sessions: "sessions",
     output: "output",
-    components: "components",
+    components: <DashboardComponents />,
   };
 
   return (
     <Card
       bordered={false}
       headStyle={{ borderBottom: 0, height: 64 }}
-      bodyStyle={{ paddingTop: 0 }}
+      bodyStyle={{ paddingTop: 24 }}
       style={{ height: "100%" }}
       tabList={tabs}
       tabBarExtraContent={
