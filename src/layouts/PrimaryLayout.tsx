@@ -4,6 +4,8 @@ import Layout from "antd/es/layout";
 import { Route, Switch } from "react-router-dom";
 import Loader from "components/Loader";
 
+import DrawerProvider from "context/drawer/Provider";
+
 const Apis = lazy(
   () => import(/* webpackChunkName: 'Apis' */ "routes/Apis")
 );
@@ -25,6 +27,7 @@ const PrimaryLayout = () => {
     <Layout.Content style={{ height: "100vh" }}>
       <Layout.Content style={{ padding: 24, marginTop: 64, marginBottom: 64 }}>
         <Loader>
+          <DrawerProvider>
           <Switch>
             <Route path="/apis">
               <Apis />
@@ -42,6 +45,7 @@ const PrimaryLayout = () => {
               <Security />
             </Route>
           </Switch>
+          </DrawerProvider>
         </Loader>
       </Layout.Content>
     </Layout.Content>

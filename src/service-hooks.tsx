@@ -36,9 +36,12 @@ function getTimestamp() {
 
 //  Dashboard
 export async function fetchDashboard(id: number): Promise<Dashboard> {
-  return await axios
-    .get(`${url}/dashboard/${id}`)
-    .then((res: AxiosResponse<Dashboard>) => res.data);
+  const dashboards:  { Dashboards: Dashboard[] } = await axios
+    .get(`https://raw.githubusercontent.com/AlonGvili/psu/master/dashboards.json`)
+    .then((res) => res.data);
+
+  const result = dashboards.Dashboards.filter(dashboard => dashboard!.id === id)  
+  return result[0]
 }
 
 export async function fetchDashboardLog(id: number): Promise<DashboardLog> {

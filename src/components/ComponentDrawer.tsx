@@ -17,12 +17,13 @@ import ComponentsInfo from "./ComponentsInfo";
 import useDrawerProvider from "../context/drawer/Hooks";
 import { useSearch } from "../utilities/utils";
 import { Space, Typography } from "antd/es";
+import { queryCache } from "react-query";
 
 export default function ComponentsDrawer() {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const id = Number.parseInt(useParams<{ id: string }>().id);
   const dashboard = useDashboard(id);
-  const { data } = useComponents();
+  const data = queryCache.getQueryData<DashboardComponent[]>("components")
   const { values, search } = useSearch<DashboardComponent>(
     "id",
     ["name", "version"],

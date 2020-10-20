@@ -14,6 +14,7 @@ import {
 import { Badge, Tag, Tooltip } from "antd";
 import * as JsSearch from "js-search";
 import React, { useState } from "react";
+import { Dashboard, DashboardFramework, DashboardComponent, Role } from "types";
 
 export declare const MethodName: ["GET", "POST", "DELETE", "PUT"];
 export declare type MethodType = typeof MethodName[number];
@@ -220,9 +221,11 @@ export function appSearch<T>(
   return search.search(term);
 }
 
-
-
-export function useSearch<T>(key: string, fields: (string | string[])[], data: T[] | undefined) {
+export function useSearch<T>(
+  key: string,
+  fields: (string | string[])[],
+  data: T[] | undefined
+) {
   const [values, setFilterValue] = useState<T[] | undefined>(data);
 
   function search(value: string) {
@@ -235,4 +238,75 @@ export function useSearch<T>(key: string, fields: (string | string[])[], data: T
   }
 
   return { values, search };
+}
+
+/**
+ * Check whether a given value is an array where
+ * each member is of a specified type
+ *
+ * @param arr - array to check
+ * @param check - type guard to use when evaluating each item
+ * @public
+ */
+export function isTypedArray<T>(
+  arr: unknown,
+  check: (x: any) => x is T
+): arr is T[] {
+  if (!Array.isArray(arr)) return false;
+  const mismatch = arr.filter((item) => !check(item));
+  if (mismatch.length > 0) return false;
+  return true;
+}
+
+
+/**
+ * Check whether a given value is an dashboard
+ * @param arg - value to check
+ * @beta
+ */
+export function isDashboard(arg: any): arg is Dashboard {
+  return (
+    typeof arg.id === "number" &&
+    typeof arg.teamId === "string" &&
+    typeof arg.description === "string" &&
+    typeof arg.name === "string" &&
+    typeof arg.id === "number" &&
+    typeof arg.baseUrl === "string" &&
+    typeof arg.description === "string" &&
+    isDashboardFramework(arg.dashboardFramework) &&
+    typeof arg.environment === "string" &&
+    typeof arg.name === "string" &&
+    typeof arg.content === "string" &&
+    isRole(arg.role) &&
+    // typeof arg.status === "StatusType" &&
+    typeof arg.filePath === "string" &&
+    typeof arg.authenticated === "boolean" &&
+    typeof arg.disableAutoStart === "boolean" &&
+    typeof arg.autoReload === "boolean" &&
+    typeof arg.notes === "string" &&
+    // typeof arg.tags === "Tag"[] &&
+    typeof arg.processId === "number" &&
+    typeof arg.processName === "string" &&
+    isDashboardComponent( arg.dashboardComponents)
+  );
+}
+
+export function isDashboardFramework(arg: any): arg is DashboardFramework {
+  return typeof (arg as DashboardFramework).id === "number" &&
+   typeof (arg as DashboardFramework).name === "string" &&
+   typeof (arg as DashboardFramework).path === "string" &&
+   typeof (arg as DashboardFramework).version === "string" 
+}
+
+export function isDashboardComponent(arg: any): arg is DashboardComponent {
+  return typeof (arg as DashboardComponent).id === "number" &&
+   typeof (arg as DashboardComponent).name === "string" &&
+   typeof (arg as DashboardComponent).path === "string" &&
+   typeof (arg as DashboardComponent).version === "string" 
+}
+
+export function isRole(arg: any): arg is Role {
+  return typeof (arg as Role).id === "number" &&
+   typeof (arg as Role).name === "string" &&
+   typeof (arg as Role).description === "string" 
 }

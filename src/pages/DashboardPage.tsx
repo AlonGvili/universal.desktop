@@ -3,7 +3,9 @@ import { useParams } from "react-router-dom";
 import { Col, Row } from "antd";
 import { useDashboard } from "service-hooks";
 import useContentProvider from "../context/content/Hooks";
-import ComponentsDrawer from "components/ComponentDrawer"
+import ComponentsDrawer from "components/ComponentDrawer";
+import { queryCache } from "react-query";
+import { Dashboard } from "types";
 
 const Loader = lazy(
   () => import(/* webpackChunkName: 'Loader' */ "components/Loader")
@@ -25,11 +27,11 @@ const DashboardPages = lazy(
 
 export default function DashboardPage() {
   const id = Number.parseInt(useParams<{ id: string }>().id);
-  const { data: dashboard } = useDashboard(id);
+  const { data: dashboard, isLoading } = useDashboard(id);
   const [{ left, right }] = useContentProvider();
 
   return (
-    <Loader tip={`Loading Dashboard ${dashboard?.id}...`} spinning>
+    <Loader tip={`Loading Dashboard ${dashboard?.id}...`} spinning={isLoading}>
       <Row gutter={[24, 24]}>
         <Col span={24}>
           <DashboardInfo dashboard={dashboard} />
