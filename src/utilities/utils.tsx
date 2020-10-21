@@ -14,7 +14,7 @@ import {
 import { Badge, Tag, Tooltip } from "antd";
 import * as JsSearch from "js-search";
 import React, { useState } from "react";
-import { Dashboard, DashboardFramework, DashboardComponent, Role } from "types";
+import { Dashboard, DashboardFramework, Module, Role } from "types";
 
 export declare const MethodName: ["GET", "POST", "DELETE", "PUT"];
 export declare type MethodType = typeof MethodName[number];
@@ -298,11 +298,11 @@ export function isDashboardFramework(arg: any): arg is DashboardFramework {
    typeof (arg as DashboardFramework).version === "string" 
 }
 
-export function isDashboardComponent(arg: any): arg is DashboardComponent {
-  return typeof (arg as DashboardComponent).id === "number" &&
-   typeof (arg as DashboardComponent).name === "string" &&
-   typeof (arg as DashboardComponent).path === "string" &&
-   typeof (arg as DashboardComponent).version === "string" 
+export function isDashboardComponent(arg: any): arg is Module {
+  return typeof (arg as Module).id === "number" &&
+   typeof (arg as Module).name === "string" &&
+   typeof (arg as Module).path === "string" &&
+   typeof (arg as Module).version === "string" 
 }
 
 export function isRole(arg: any): arg is Role {

@@ -33,7 +33,7 @@ export type Dashboard = {
   tags?: Tag[];
   processId?: number;
   processName?: string;
-  dashboardComponents?: DashboardComponent[];
+  dashboardComponents?: Module[];
 };
 
 export type DashboardLog = {
@@ -60,7 +60,7 @@ export type DashboardFramework = {
   path: string;
 };
 
-export type DashboardComponent = {
+export type Module = {
   id: number;
   name: string;
   version: string;

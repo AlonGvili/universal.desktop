@@ -3,7 +3,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { queryCache, useMutation, useQuery } from "react-query";
 import {
   Dashboard,
-  DashboardComponent,
+  Module,
   DashboardDiagnostics,
   DashboardFramework,
   DashboardLog,
@@ -333,8 +333,8 @@ export function useTotalMemory() {
 */
 
 // Get all components
-export async function fetchComponents(): Promise<DashboardComponent[]> {
-  const components: { Components: DashboardComponent[] } = await axios
+export async function fetchComponents(): Promise<Module[]> {
+  const components: { Components: Module[] } = await axios
     .get(`https://raw.githubusercontent.com/AlonGvili/psu/master/components.json`)
     .then((res) => res.data);
 

@@ -3,14 +3,14 @@ import { useParams } from "react-router";
 import { Table, Button, Popconfirm } from "antd";
 import React from "react";
 import type { ColumnProps } from "antd/es/table";
-import { DashboardComponent } from "../types";
+import { Module } from "../types";
 import { Typography } from "antd/es";
 
 export default function DashboardComponents() {
   const id = Number.parseInt(useParams<{ id: string }>().id);
-  const { data: dashboard } = useDashboard(id);
+  const {data: dashboard} = useDashboard(id);
   const [updateDashboard] = useUpdateDashboard();
-  const componentsColumns: ColumnProps<DashboardComponent>[] = [
+  const componentsColumns: ColumnProps<Module>[] = [
     {
       dataIndex: "name",
       title: "Name",
@@ -63,7 +63,7 @@ export default function DashboardComponents() {
 
   return (
     <Table
-      rowKey={(record: DashboardComponent) => record.id}
+      rowKey={(record: Module) => record.id}
       columns={componentsColumns}
       dataSource={dashboard?.dashboardComponents}
       pagination={{

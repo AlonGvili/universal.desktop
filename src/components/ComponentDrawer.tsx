@@ -1,65 +1,99 @@
 /* eslint-disable array-callback-return */
-import { useState } from "react";
+import React, { useState } from "react";
 import { useDashboard, useUpdateDashboard } from "../service-hooks";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import { CheckCircleOutlined, MinusCircleOutlined } from "@ant-design/icons";
-import { Table, Tag, Drawer, Button, Row, Col, Card, Form, Input } from "antd";
-import React from "react";
+import {
+  Table,
+  Tag,
+  Drawer,
+  Button,
+  Row,
+  Col,
+  Card,
+  Form,
+  Input,
+  Space,
+  Typography,
+} from "antd";
 import type { ColumnProps } from "antd/es/table";
-import { DashboardComponent } from "../types";
+import { Module } from "../types";
 import ComponentsInfo from "./ComponentsInfo";
 import useDrawerProvider from "../context/drawer/Hooks";
 import { useSearch } from "../utilities/utils";
-import { Space, Typography } from "antd/es";
 import { queryCache } from "react-query";
 
+function renderColumn<T>(value: keyof T) {
+  return (
+    <Typography.Text
+      style={{
+        fontFamily: "SFProDisplay-Regular",
+        fontSize: 14,
+      }}
+    >
+      {value}
+    </Typography.Text>
+  );
+}
+
 export default function ComponentsDrawer() {
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const id = Number.parseInt(useParams<{ id: string }>().id);
-  const dashboard = useDashboard(id);
-  const data = queryCache.getQueryData<DashboardComponent[]>("components");
-  const { values, search } = useSearch<DashboardComponent>(
+  const params = useParams<{ id: string }>();
+  const id = Number.parseInt(params.id);
+  const { data: dashboard } = useDashboard(id);
+  const [update, { isLoading }] = useUpdateDashboard();
+  const components = queryCache.getQueryData<Module[]>("components");
+  const { values, search } = useSearch<Module>(
     "id",
     ["name", "version"],
-    data
+    components
   );
-  const [updateDashboard, updateDashboardInfo] = useUpdateDashboard();
-  const [selectedComponents, setSelectedComponents] = useState<
-    DashboardComponent[]
-  >([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedComponents, setSelectedComponents] = useState<Module[]>([]);
   const [{ isVisible }, dispatch] = useDrawerProvider();
 
   const [searchForm] = Form.useForm();
 
-  const componentsColumns: ColumnProps<DashboardComponent>[] = [
+  function onChange(selectedRowKeys, selectedRows) {
+    const modules = dashboard?.dashboardComponents;
+    setSelectedRowKeys(selectedRowKeys);
+    let toInstall: any[] = [];
+    if (!modules || modules === (null || undefined)) {
+      setSelectedComponents(selectedRows);
+    } else {
+      selectedRows.map((row: Module) => {
+        if (modules?.some((install) => install.id !== row.id)) {
+          toInstall.push(row);
+        }
+      });
+    }
+    setSelectedComponents([modules, ...toInstall]);
+  }
+
+  function getCheckBoxProps(record: Module) {
+    const modules = dashboard?.dashboardComponents;
+    return {
+      disabled: modules?.some((install) => install.id === record.id),
+      name: record.name,
+    };
+  }
+
+  const columns: ColumnProps<Module>[] = [
     {
       dataIndex: "name",
       title: "Name",
-      render: (_, record) => (
-        <Typography.Text
-          style={{ fontFamily: "SFProDisplay-Regular", fontSize: 14 }}
-        >
-          {record.name}
-        </Typography.Text>
-      ),
+      render: (_, record) => renderColumn(record.name),
     },
     {
       dataIndex: "version",
       title: "Version",
       align: "center",
-      render: (_, record) => (
-        <Typography.Text
-          style={{ fontFamily: "SFProDisplay-Regular", fontSize: 14 }}
-        >
-          {record.version}
-        </Typography.Text>
-      ),
+      render: (_, record) => renderColumn(record.version),
     },
     {
       dataIndex: "actions",
       align: "right",
       render: (_, record) => {
-        return dashboard.data?.dashboardComponents?.some(
+        return dashboard?.dashboardComponents?.some(
           (component) => component.id === record.id
         ) ? (
           <Tag icon={<CheckCircleOutlined />} color="success">
@@ -76,36 +110,8 @@ export default function ComponentsDrawer() {
 
   const rowSelection = {
     selectedRowKeys: selectedRowKeys,
-    onChange: (selectedRowKeys, selectedRows) => {
-      setSelectedRowKeys(selectedRowKeys);
-      let toInstall: any[] = [];
-      if (
-        null === dashboard.data?.dashboardComponents ||
-        dashboard.data?.dashboardComponents?.length === 0
-      ) {
-        setSelectedComponents(selectedRows);
-      } else {
-        selectedRows.map((row: DashboardComponent) => {
-          if (
-            dashboard.data?.dashboardComponents?.some(
-              (install) => install.id !== row.id
-            )
-          ) {
-            toInstall.push(row);
-          }
-        });
-      }
-      setSelectedComponents([
-        dashboard.data?.dashboardComponents,
-        ...toInstall,
-      ]);
-    },
-    getCheckboxProps: (record) => ({
-      disabled: dashboard.data?.dashboardComponents?.some(
-        (install) => install.id === record.id
-      ),
-      name: record.name,
-    }),
+    onChange: onChange,
+    getCheckboxProps: getCheckBoxProps,
   };
 
   return (
@@ -156,14 +162,14 @@ export default function ComponentsDrawer() {
                   <Col>
                     <Button
                       type="primary"
-                      loading={updateDashboardInfo.isLoading}
+                      loading={isLoading}
                       disabled={
-                        data?.length ===
-                        dashboard.data?.dashboardComponents?.length
+                        components?.length ===
+                        dashboard?.dashboardComponents?.length
                       }
                       onClick={() => {
-                        updateDashboard({
-                          ...dashboard.data,
+                        update({
+                          ...dashboard,
                           dashboardComponents: selectedComponents,
                         });
                         setSelectedRowKeys([]);
@@ -177,8 +183,8 @@ export default function ComponentsDrawer() {
             </Col>
           </Row>
           <Table
-            rowKey={(record: DashboardComponent) => record.id}
-            columns={componentsColumns}
+            rowKey={(record: Module) => record.id}
+            columns={columns}
             dataSource={values}
             rowSelection={{ ...rowSelection }}
             pagination={{
