@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { Col, Row } from "antd";
 import { useDashboard } from "service-hooks";
 import useContentProvider from "../context/content/Hooks";
-import ComponentsDrawer from "components/ComponentDrawer";
 
 const Loader = lazy(
   () => import(/* webpackChunkName: 'Loader' */ "components/Loader")
@@ -21,6 +20,12 @@ const DashboardEditor = lazy(
 const DashboardPages = lazy(
   () =>
     import(/* webpackChunkName: 'DashboardPages' */ "components/DashboardPages")
+);
+const ComponentsDrawer = lazy(
+  () =>
+    import(
+      /* webpackChunkName: 'ComponentsDrawer' */ "components/ComponentDrawer"
+    )
 );
 
 export default function DashboardPage() {
@@ -41,7 +46,7 @@ export default function DashboardPage() {
           <DashboardEditor dashboard={dashboard} />
         </Col>
 
-        <Col span={right.colSpan} style={{ minHeight: "100%" }}>
+        <Col span={right.colSpan} style={{ height: "inherit" }}>
           <DashboardPages dashboard={dashboard} />
         </Col>
       </Row>
