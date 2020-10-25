@@ -47,7 +47,7 @@ export default function DashboardPage() {
         </Col>
 
         <Col span={right.colSpan} style={{ height: "inherit" }}>
-          <DashboardPages dashboard={dashboard} />
+          <DashboardPages />
         </Col>
       </Row>
       <ComponentsDrawer />

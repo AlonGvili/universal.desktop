@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import React, { lazy, useState } from "react";
 import { Card } from "antd";
-import DashboardSettings from "./DashboardSettings";
-import DashboardComponents from "./DashboardComponents";
-import DashboardSessions from "./DashboardSessions";
-import DashboardEndpoints from "./DashboardEndpoints";
-import { Dashboard } from "types";
 import { Button } from "antd/es";
 import useContentProvider from "context/content/Hooks";
 import { PicCenterOutlined, PicRightOutlined } from "@ant-design/icons";
+import Loader from "./Loader";
 
-export default function DashboardPages(props: {
-  dashboard: Dashboard | undefined;
-}) {
+const DashboardSettings = lazy(() => import( /* webpackChunkName: 'DashboardSettings' */"./DashboardSettings"));
+const DashboardComponents = lazy(() => import( /* webpackChunkName: 'DashboardComponents' */"./DashboardComponents"));
+const DashboardSessions = lazy(() => import( /* webpackChunkName: 'DashboardSessions' */"./DashboardSessions"));
+const DashboardEndpoints = lazy(() => import( /* webpackChunkName: 'DashboardEndpoints' */"./DashboardEndpoints"));
+
+export default function DashboardPages() {
   const [currentTab, setCurrentTab] = useState("settings");
 
   const [{ right }, dispatch] = useContentProvider();
@@ -70,7 +69,7 @@ export default function DashboardPages(props: {
       }}
       onTabChange={(key) => setCurrentTab(key)}
     >
-      {tabsPanels[currentTab]}
+      <Loader>{tabsPanels[currentTab]}</Loader>
     </Card>
   );
 }
