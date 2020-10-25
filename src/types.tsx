@@ -42,6 +42,7 @@ export type DashboardLog = {
 };
 
 export type DashboardDiagnostics = {
+  id: number;
   memory: number;
   memoryHistory: number[];
   sessions: Array<DashboardSession>;

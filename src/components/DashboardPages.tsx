@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Card } from "antd";
 import DashboardSettings from "./DashboardSettings";
 import DashboardComponents from "./DashboardComponents";
+import DashboardSessions from "./DashboardSessions";
+import DashboardEndpoints from "./DashboardEndpoints";
 import { Dashboard } from "types";
 import { Button } from "antd/es";
 import useContentProvider from "context/content/Hooks";
@@ -38,8 +40,8 @@ export default function DashboardPages(props: {
 
   const tabsPanels = {
     settings: <DashboardSettings />,
-    endpoints: "endpoints",
-    sessions: "sessions",
+    endpoints: <DashboardEndpoints />,
+    sessions: <DashboardSessions />,
     output: "output",
     components: <DashboardComponents />,
   };

@@ -36,12 +36,16 @@ function getTimestamp() {
 
 //  Dashboard
 export async function fetchDashboard(id: number): Promise<Dashboard> {
-  const dashboards:  { Dashboards: Dashboard[] } = await axios
-    .get(`https://raw.githubusercontent.com/AlonGvili/psu/master/dashboards.json`)
+  const dashboards: { Dashboards: Dashboard[] } = await axios
+    .get(
+      `https://raw.githubusercontent.com/AlonGvili/psu/master/dashboards.json`
+    )
     .then((res) => res.data);
 
-  const result = dashboards.Dashboards.filter(dashboard => dashboard!.id === id)  
-  return result[0]
+  const result = dashboards.Dashboards.filter(
+    (dashboard) => dashboard!.id === id
+  );
+  return result[0];
 }
 
 export async function fetchDashboardLog(id: number): Promise<DashboardLog> {
@@ -59,7 +63,9 @@ export async function fetchDashboardLog(id: number): Promise<DashboardLog> {
 
 export async function fetchDashboards(): Promise<Dashboard[]> {
   const dashboards = await axios
-    .get(`https://raw.githubusercontent.com/AlonGvili/psu/master/dashboards.json`)
+    .get(
+      `https://raw.githubusercontent.com/AlonGvili/psu/master/dashboards.json`
+    )
     .then((res) => res.data);
 
   dashboards.Dashboards.forEach((dashboard: Dashboard) => {
@@ -204,8 +210,29 @@ export function useStopDashboard() {
   );
 }
 
+export async function fetchDashboardDiagnostics(id: number) {
+  const diagnostics: { Diagnostics: DashboardDiagnostics[] } = await axios
+    .get(
+      `https://raw.githubusercontent.com/AlonGvili/psu/master/diagnostics.json`
+    )
+    .then((res) => res.data);
+
+  return diagnostics.Diagnostics.find((diagnostic) => diagnostic.id === id);
+}
+
 export function useDashboard(id: number) {
-  return useQuery(["dashboard", { dashboardId: id }], () => fetchDashboard(id));
+  return useQuery(
+    ["dashboard", { dashboardId: id }],
+    () => fetchDashboard(id),
+    {
+      onSuccess: (dashboard) => {
+        queryCache.prefetchQuery(
+          ["dashboard", { dashboardId: dashboard.id, type: "diagnostics" }],
+          () => fetchDashboardDiagnostics(id)
+        );
+      },
+    }
+  );
 }
 
 export function useDashboardLog(id: number) {
@@ -236,16 +263,9 @@ export function useDashboardDiagnostics(
 ) {
   return useQuery(
     ["dashboard", { dashboardId: id, type: "diagnostics" }],
-    async () => {
-      return await axios
-        .get(`${url}/dashboard/${id}/diagnostics`)
-        .then((res: AxiosResponse<DashboardDiagnostics>) => res.data);
-    },
+    () => fetchDashboardDiagnostics(id),
     {
       enabled: isDashboardRunning,
-      onError: (error: AxiosError) => {
-        console.log(error?.message);
-      },
     }
   );
 }
@@ -335,7 +355,9 @@ export function useTotalMemory() {
 // Get all components
 export async function fetchComponents(): Promise<Module[]> {
   const components: { Components: Module[] } = await axios
-    .get(`https://raw.githubusercontent.com/AlonGvili/psu/master/components.json`)
+    .get(
+      `https://raw.githubusercontent.com/AlonGvili/psu/master/components.json`
+    )
     .then((res) => res.data);
 
   return components.Components;
@@ -352,7 +374,9 @@ export function useComponents() {
 // Get all frameworks
 export async function fetchFrameworks(): Promise<DashboardFramework[]> {
   const frameworks = await axios
-    .get(`https://raw.githubusercontent.com/AlonGvili/psu/master/frameworks.json`)
+    .get(
+      `https://raw.githubusercontent.com/AlonGvili/psu/master/frameworks.json`
+    )
     .then((res) => res.data);
 
   return frameworks.Frameworks;
@@ -365,7 +389,9 @@ export function useFrameworks() {
 // Get the newest framework.
 export async function fetchNewestFramework() {
   const newestFramework = await axios
-    .get(`https://raw.githubusercontent.com/AlonGvili/psu/master/newestframework.json`)
+    .get(
+      `https://raw.githubusercontent.com/AlonGvili/psu/master/newestframework.json`
+    )
     .then((res) => res.data);
 
   return newestFramework.NewestFramework;
