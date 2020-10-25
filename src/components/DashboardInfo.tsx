@@ -10,6 +10,7 @@ import {
 } from "@ant-design/icons";
 import { Link, useHistory } from "react-router-dom";
 import useDrawerProvider from "context/drawer/Hooks";
+import DashboardStats from "components/DashboardStats"
 
 export default function DashboardInfo(props: {
   dashboard: Dashboard | undefined;
@@ -46,6 +47,8 @@ export default function DashboardInfo(props: {
             type="secondary"
           >{`#${dashboard?.id}`}</Typography.Text>
         </Space>
+        <DashboardStats />
+
         <Button.Group>
           <Button
             icon={<AppstoreAddOutlined />}
