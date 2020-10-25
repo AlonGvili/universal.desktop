@@ -43,8 +43,8 @@ export default function DashboardSessions() {
 
   const columns: ColumnProps<DashboardSession>[] = [
     {
-      dataIndex: "name",
-      title: "Name",
+      dataIndex: "id",
+      title: "Id",
       render: (_, record) => renderColumn(record.id),
     },
     {
