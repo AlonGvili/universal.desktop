@@ -50,7 +50,7 @@ export default function DashboardStats(){
         dashboard?.status === 1
       );
 
-    let memory = renderStats("Memory:", `${byteSize(diagnostics?.memory || 0).value}${byteSize(diagnostics?.memory).unit.toLowerCase()}`)  
+    let memory = renderStats("Memory:", `${byteSize(diagnostics?.memory || 0).value} ${byteSize(diagnostics?.memory).unit.toLowerCase()}`)  
     let sessions = renderStats("Sessions:", `${diagnostics?.sessions?.length || 0}`)  
     let endpoints = renderStats("Endpoints:", `${diagnostics?.endpoints?.length || 0}`)  
     return <Space size="large">
