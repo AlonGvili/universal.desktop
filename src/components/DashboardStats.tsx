@@ -1,7 +1,7 @@
 import React from "react"
 import { queryCache } from "react-query";
 import { useParams } from "react-router-dom";
-import { Dashboard, DashboardDiagnostics } from "types";
+import { Dashboard } from "types";
 import { Space, Typography} from "antd"
 import byteSize from 'byte-size'
 import { useDashboardDiagnostics } from "service-hooks";
