@@ -50,7 +50,7 @@ export default function DashboardPages() {
       bordered={false}
       headStyle={{ borderBottom: 0, height: 64 }}
       bodyStyle={{ paddingTop: 24 }}
-      style={{ height: "100%" }}
+      style={{ height: "100vh" }}
       tabList={tabs}
       tabBarExtraContent={
         <Button

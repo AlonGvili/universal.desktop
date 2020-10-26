@@ -39,11 +39,11 @@ export function contentReducer(
       return {
         left: {
           isExpanded: false,
-          colSpan: 16,
+          colSpan: 12,
         },
         right: {
           isExpanded: false,
-          colSpan: 8,
+          colSpan: 12,
         },
       };
     }

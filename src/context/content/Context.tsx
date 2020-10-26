@@ -24,11 +24,11 @@ export type ContextTypeProps = [
 export const initState = {
   left: {
     isExpanded: false,
-    colSpan: 15,
+    colSpan: 12,
   },
   right: {
     isExpanded: false,
-    colSpan: 9,
+    colSpan: 12,
   },
 };
 

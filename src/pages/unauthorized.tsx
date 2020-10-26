@@ -1,5 +1,5 @@
 import React, { lazy } from "react";
-import { Button, Space, Result } from "antd";
+import { Button, Result } from "antd";
 import { useHistory } from "react-router-dom";
 const UnAuthorizedImage = lazy(
   () =>
@@ -14,11 +14,9 @@ export default function UnAuthorizedPage() {
       subTitle="Please login to view this page."
       icon={<UnAuthorizedImage />}
       extra={
-        <Space>
-          <Button type="primary" onClick={() => history.push("/login")}>
-            Login
-          </Button>
-        </Space>
+        <Button type="primary" onClick={() => history.push("/login")}>
+          Login
+        </Button>
       }
     />
   );

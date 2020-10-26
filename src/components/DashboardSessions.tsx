@@ -2,20 +2,31 @@
 import React from "react";
 import { useDashboardDiagnostics } from "../service-hooks";
 import { useParams } from "react-router-dom";
-import { Table, Row, Col, Card, Form, Input, Space, Typography } from "antd";
+import {
+  Table,
+  Row,
+  Col,
+  Card,
+  Form,
+  Input,
+  Space,
+  Typography,
+  List,
+} from "antd";
 import type { ColumnProps } from "antd/es/table";
 import { Dashboard, DashboardEndpoint, DashboardSession } from "../types";
 import { useSearch } from "../utilities/utils";
 import { queryCache } from "react-query";
 import dayjs from "dayjs";
 
-function renderColumn<T>(value: keyof T) {
+function renderColumn<T>(value: keyof T, copyable?: boolean) {
   return (
     <Typography.Text
       style={{
         fontFamily: "SFProDisplay-Regular",
         fontSize: 14,
       }}
+      copyable={copyable}
     >
       {value}
     </Typography.Text>
@@ -45,7 +56,7 @@ export default function DashboardSessions() {
     {
       dataIndex: "id",
       title: "Id",
-      render: (_, record) => renderColumn(record.id),
+      render: (_, record) => renderColumn(record.id, true),
     },
     {
       dataIndex: "userName",
@@ -70,52 +81,73 @@ export default function DashboardSessions() {
   ];
 
   return (
-   
-      <Space direction="vertical" style={{ width: "100%" }}>
-        <Card bordered={false} bodyStyle={{ backgroundColor: "#272727", padding: 12 }}>
-          <Row gutter={16}>
-            <Col span={24}>
-              <Typography.Text
-                style={{
-                  fontFamily: "SFProDisplay-Regular",
-                  fontSize: 20,
-                  lineHeight: "28px",
-                }}
+    <Space direction="vertical" style={{ width: "100%" }}>
+      <Card
+        bordered={false}
+        bodyStyle={{ backgroundColor: "#272727", padding: 12 }}
+      >
+        <Row gutter={16}>
+          <Col span={24}>
+            <Typography.Text
+              style={{
+                fontFamily: "SFProDisplay-Regular",
+                fontSize: 20,
+                lineHeight: "28px",
+              }}
+            >
+              <Form
+                colon={false}
+                name="search_components"
+                layout="inline"
+                form={searchForm}
               >
-                <Form
-                  colon={false}
-                  name="search_components"
-                  layout="inline"
-                  form={searchForm}
-                >
-                  <Form.Item name="search" style={{ width: "100%"}}>
-                    <Input
-                      placeholder="Search for a session"
-                      bordered={false}
-                      style={{
-                        paddingLeft: 0,
-                        fontFamily: "SFProDisplay-Regular",
-                        fontSize: "inherit",
-
-                      }}
-                      allowClear
-                      onChange={(event) => search(event.target.value)}
-                    />
-                  </Form.Item>
-                </Form>
-              </Typography.Text>
-            </Col>
-          </Row>
-        </Card>
-        <Table
-          rowKey={(record: DashboardSession) => record.id}
-          columns={columns}
-          dataSource={values}
-          pagination={{
-            hideOnSinglePage: true,
-          }}
-        />
-      </Space>
-    
+                <Form.Item name="search" style={{ width: "100%" }}>
+                  <Input
+                    placeholder="Search for a session"
+                    bordered={false}
+                    style={{
+                      paddingLeft: 0,
+                      fontFamily: "SFProDisplay-Regular",
+                      fontSize: "inherit",
+                    }}
+                    allowClear
+                    onChange={(event) => search(event.target.value)}
+                  />
+                </Form.Item>
+              </Form>
+            </Typography.Text>
+          </Col>
+        </Row>
+      </Card>
+      <Table
+        rowKey={(record: DashboardSession) => record.id}
+        columns={columns}
+        dataSource={values}
+        expandable={{
+          expandedRowRender: (record) => {
+            return (
+              <List
+                size="default"
+                dataSource={record.endpoints}
+                renderItem={(item) => {
+                  return (
+                    <List.Item style={{ padding: 12, paddingLeft: 48, paddingRight: 0 }}>
+                      <List.Item.Meta title={renderColumn(item.id, true)} />
+                      <Space style={{ padding: 0, margin: 0}}>
+                        {renderColumn(`Average Execution Time:`)}
+                        {renderColumn(`${item.averageExecutionTime}`)}
+                      </Space>
+                    </List.Item>
+                  );
+                }}
+              />
+            );
+          },
+        }}
+        pagination={{
+          hideOnSinglePage: true,
+        }}
+      />
+    </Space>
   );
 }
