@@ -1,9 +1,9 @@
 import React, { lazy } from "react";
 import { Route, Switch } from "react-router-dom";
 import Loader from "components/Loader";
-const NotFound = lazy(() => import("../pages/NotFound"));
-const UnAuthorized = lazy(() => import("../pages/UnAuthorized"));
-const Login = lazy(() => import("pages/LoginPage"));
+const NotFound = lazy(() => import( /* webpackChunkName: 'NotFound' */ "pages/NotFound"));
+const UnAuthorized = lazy(() => import( /* webpackChunkName: 'UnAuthorized' */ "pages/UnAuthorized"));
+const Login = lazy(() => import(/* webpackChunkName: 'Login' */ "pages/LoginPage"));
 
 export default function Pages() {
   return (
