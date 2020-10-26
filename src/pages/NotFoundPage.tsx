@@ -5,7 +5,7 @@ const NotFoundImage = lazy(
     () =>
       import(/* webpackChunkName: 'NotFoundImage' */ "pages/notfound-image.js")
   );
-export default function NotFound() {
+export default function NotFoundPage() {
     const history = useHistory()
     return (
         <Result
