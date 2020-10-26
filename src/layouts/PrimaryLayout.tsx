@@ -21,8 +21,8 @@ const Settings = lazy(
 const Security = lazy(
   () => import(/* webpackChunkName: 'Security' */ "routes/Security")
 );
-const Pages = lazy(
-  () => import(/* webpackChunkName: 'Pages' */ "routes/Pages")
+const CustomPages = lazy(
+  () => import(/* webpackChunkName: 'CustomPages' */ "routes/CustomPages")
 );
 
 const PrimaryLayout = () => {
@@ -48,7 +48,7 @@ const PrimaryLayout = () => {
               <Security />
             </Route>
             <Route path="/pages">
-              <Pages />
+              <CustomPages />
             </Route>
           </Switch>
           </DrawerProvider>

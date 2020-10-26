@@ -5,7 +5,7 @@ const NotFound = lazy(() => import( /* webpackChunkName: 'NotFound' */ "pages/No
 const UnAuthorized = lazy(() => import( /* webpackChunkName: 'UnAuthorized' */ "pages/UnAuthorized"));
 const Login = lazy(() => import(/* webpackChunkName: 'Login' */ "pages/LoginPage"));
 
-export default function Pages() {
+export default function CustomPages() {
   return (
     <Switch>
       <Loader>
