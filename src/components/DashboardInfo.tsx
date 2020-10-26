@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy } from "react";
 import { Card, Typography, Space } from "antd";
 import { capitalize, setPowerIconColor } from "utilities/utils";
 import { Dashboard } from "types";
@@ -10,7 +10,8 @@ import {
 } from "@ant-design/icons";
 import { Link, useHistory } from "react-router-dom";
 import useDrawerProvider from "context/drawer/Hooks";
-import DashboardStats from "components/DashboardStats"
+
+const DashboardStats = lazy(() => import( /* webpackChunkName: 'DashboardStats' */ "components/DashboardStats"))
 
 export default function DashboardInfo(props: {
   dashboard: Dashboard | undefined;

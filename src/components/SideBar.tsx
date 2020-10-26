@@ -6,6 +6,7 @@ import {
   DashboardOutlined,
   CodeOutlined,
   SettingOutlined,
+  FileOutlined,
 } from "@ant-design/icons";
 
 export default function SideBar() {
@@ -71,6 +72,17 @@ export default function SideBar() {
           </Menu.Item>
           <Menu.Item key="security">
             <Link to="/security">Security</Link>
+          </Menu.Item>
+        </Menu.SubMenu>
+        <Menu.SubMenu icon={<FileOutlined />} title="Pages">
+          <Menu.Item key="login">
+            <Link to="/pages/login">Login</Link>
+          </Menu.Item>
+          <Menu.Item key="notfound">
+            <Link to="/pages/notFound">Not Found</Link>
+          </Menu.Item>
+          <Menu.Item key="unauthorize">
+            <Link to="/pages/unauthorized">UnAuthorized</Link>
           </Menu.Item>
         </Menu.SubMenu>
       </Menu>
