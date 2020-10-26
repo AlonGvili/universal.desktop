@@ -3,7 +3,7 @@ import { Button, Space, Result } from 'antd'
 import { useHistory } from 'react-router-dom'
 const NotFoundImage = lazy(
     () =>
-      import(/* webpackChunkName: 'NotFoundImage' */ "pages/notfound-image")
+      import(/* webpackChunkName: 'NotFoundImage' */ "pages/notfound-image.js")
   );
 export default function NotFound() {
     const history = useHistory()

@@ -3,7 +3,7 @@ import { Button, Result } from "antd";
 import { useHistory } from "react-router-dom";
 const UnAuthorizedImage = lazy(
   () =>
-    import(/* webpackChunkName: 'UnauthorizedImage' */ "pages/unauthorized-image")
+    import(/* webpackChunkName: 'UnauthorizedImage' */ "pages/unauthorized-image.js")
 );
 
 export default function UnAuthorizedPage() {
