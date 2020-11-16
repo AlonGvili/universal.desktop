@@ -46,7 +46,7 @@ module.exports = {
         lessLoaderOptions: {
           lessOptions: {
             modifyVars: getThemeVariables({
-              dark: true,
+              dark: false,
             }),
             javascriptEnabled: true,
           },
